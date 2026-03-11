@@ -1,0 +1,7 @@
+{
+  "name": "RanchoLyL",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

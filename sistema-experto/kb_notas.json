@@ -1,0 +1,33 @@
+{
+  "config": {
+    "scale": {"min": 0.0, "max": 5.0},
+    "conflict_resolution": "priority_specificity",
+    "combine": "max"
+  },
+  "rules": [
+    {
+      "name": "R_MENOR_3",
+      "when": "nota < 3.0",
+      "then": { "message": "Debes estudiar más." },
+      "cf": 1.0,
+      "salience": 30,
+      "tags": ["riesgo", "recomendacion"]
+    },
+    {
+      "name": "R_ENTRE_3_Y_4",
+      "when": "nota >= 3.0 and nota < 4.0",
+      "then": { "message": "Vas bien, pero puedes mejorar." },
+      "cf": 0.95,
+      "salience": 20,
+      "tags": ["mejora"]
+    },
+    {
+      "name": "R_MAYOR_IGUAL_4",
+      "when": "nota >= 4.0",
+      "then": { "message": "Excelente desempeño." },
+      "cf": 0.90,
+      "salience": 10,
+      "tags": ["excelente"]
+    }
+  ]
+}

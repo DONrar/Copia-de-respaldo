@@ -1,0 +1,7 @@
+{
+  "name": "deudores",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

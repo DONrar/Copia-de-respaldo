@@ -1,0 +1,30 @@
+services:
+  jenkins-master:
+    build: ./jenkins
+    container_name: jenkins-master
+    ports:
+     - "8085:8080"
+     - 50010:50000  
+
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - jenkins-net
+
+  jenkins-agent:
+    build: ./agent
+    depends_on:
+      - jenkins-master
+    deploy:
+      replicas: 5
+    environment:
+      - JENKINS_URL=http://jenkins-master:8080
+    networks:
+      - jenkins-net
+
+
+volumes:
+  jenkins_home:
+
+networks:
+  jenkins-net:

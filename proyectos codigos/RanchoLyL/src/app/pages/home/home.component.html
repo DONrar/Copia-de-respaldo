@@ -1,0 +1,36 @@
+<ion-content class="ion-padding fondo-gradient">
+
+  <div class="bienvenida animated fade-in">
+    <img src="assets/logo.jpg" alt="Logo negocio" class="imagen-principal bounce-in" />
+    <h2>¡Bienvenido a <span>{{ nombreNegocio }}</span>!</h2>
+    <ion-button class="boton-menu" (click)="irAlMenu()">🍽 Ver menú</ion-button>
+  </div>
+
+  <div class="frase glassmorph">
+    <ion-icon name="sparkles-outline" class="iconito"></ion-icon>
+    <p>Explora nuestro menú y disfruta los mejores combos del pueblo 🍟🍔</p>
+  </div>
+
+  <ion-card class="mas-vendidos glassmorph fade-in-up">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="flame-outline" class="iconito2"></ion-icon>
+        Lo más vendido
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6" *ngFor="let item of productosPopulares">
+            <div class="producto-popular zoom-hover" (click)="verDetalle(item)">
+              <img [src]="item.imagen" [alt]="item.nombre" />
+              <h4>{{ item.nombre }}</h4>
+              <p class="precio">{{ item.precio | currency:'COP':'symbol-narrow' }}</p>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

@@ -1,0 +1,139 @@
+<ion-content class="ion-padding" [fullscreen]="true" color="light">
+
+  <!-- 🟢 Estado actual mejorado -->
+  <ion-card class="estado-card fade-in" [color]="estadoActual.abierto ? 'success' : 'medium'">
+    <ion-card-content class="ion-text-center estado-content">
+      <div class="status-indicator" [class.abierto]="estadoActual.abierto">
+        <ion-icon
+          [name]="estadoActual.abierto ? 'checkmark-circle' : 'close-circle'"
+          class="estado-icon">
+        </ion-icon>
+      </div>
+      <h2 class="estado-titulo">{{ estadoActual.mensaje }}</h2>
+      <p class="estado-subtitulo" *ngIf="estadoActual.abierto">
+        Cerramos a las {{ obtenerHoraCierreHoy() }}
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- 🗓️ Horarios semanales mejorados -->
+  <ion-card class="fade-in-up horarios-card">
+    <ion-card-header class="card-header-blue">
+      <ion-card-title>
+        <ion-icon name="time-outline" class="header-icon"></ion-icon>
+        Horarios de atención
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Horario de hoy destacado -->
+      <div class="hoy-destacado ion-margin-bottom">
+        <ion-item lines="none" class="hoy-item">
+          <ion-icon name="today-outline" slot="start" color="primary"></ion-icon>
+          <ion-label>
+            <strong>Hoy ({{ obtenerNombreDiaHoy() }})</strong>
+            <p *ngIf="horarioHoy; else cerradoHoy">
+              {{ formatoHora(horarioHoy.apertura) }} - {{ formatoHora(horarioHoy.cierre) }}
+            </p>
+            <ng-template #cerradoHoy>
+              <p class="cerrado-text">Cerrado hoy</p>
+            </ng-template>
+          </ion-label>
+        </ion-item>
+      </div>
+
+      <!-- Lista de horarios desplegable -->
+      <ion-accordion-group expand="inset" class="horarios-accordion">
+        <ion-accordion value="horarios-completos" class="custom-accordion">
+          <ion-item slot="header" class="accordion-header">
+            <ion-icon name="calendar-outline" slot="start" color="primary"></ion-icon>
+            <ion-label>
+              <strong>Ver horarios completos</strong>
+            </ion-label>
+            <ion-icon name="chevron-down" slot="end" class="accordion-arrow"></ion-icon>
+          </ion-item>
+          <div slot="content" class="accordion-content">
+            <ion-list lines="none" class="horarios-list">
+              <ion-item
+                *ngFor="let dia of diasSemana; index as i"
+                class="horario-item"
+                [class.hoy]="esHoy(i)">
+                <ion-icon
+                  [name]="esHoy(i) ? 'star' : 'alarm-outline'"
+                  slot="start"
+                  [color]="esHoy(i) ? 'warning' : 'medium'">
+                </ion-icon>
+                <ion-label *ngIf="horariosPorDia[i] as horario; else cerrado">
+                  <strong [class.dia-hoy]="esHoy(i)">{{ dia }}</strong>
+                  <p>{{ formatoHora(horario.apertura) }} - {{ formatoHora(horario.cierre) }}</p>
+                </ion-label>
+                <ng-template #cerrado>
+                  <ion-label>
+                    <strong [class.dia-hoy]="esHoy(i)">{{ dia }}</strong>
+                    <p class="cerrado-text">Cerrado</p>
+                  </ion-label>
+                </ng-template>
+              </ion-item>
+            </ion-list>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- 📍 Información de contacto unificada -->
+  <ion-card class="fade-in-up contacto-card">
+    <ion-card-header class="card-header-blue">
+      <ion-card-title>
+        <ion-icon name="business-outline" class="header-icon"></ion-icon>
+        Información de contacto
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Dirección -->
+      <ion-item lines="none" class="contacto-item">
+        <ion-icon name="location-outline" slot="start" color="primary"></ion-icon>
+        <ion-label>
+          <h3>Dirección</h3>
+          <p>{{ direccion }}</p>
+        </ion-label>
+      </ion-item>
+
+      <!-- Teléfono -->
+      <ion-item lines="none" class="contacto-item">
+        <ion-icon name="call-outline" slot="start" color="primary"></ion-icon>
+        <ion-label>
+          <h3>Teléfono</h3>
+          <p>{{ formatoTelefono(telefono) }}</p>
+        </ion-label>
+      </ion-item>
+
+      <!-- Botones de acción -->
+      <div class="botones-contacto">
+        <ion-button
+          expand="block"
+          fill="solid"
+          color="primary"
+          [href]="googleMapsLink"
+          target="_blank"
+          class="action-button">
+          <ion-icon name="navigate-outline" slot="start"></ion-icon>
+          Cómo llegar
+        </ion-button>
+
+        <ion-button
+          expand="block"
+          fill="outline"
+          color="success"
+          [href]="whatsappLink"
+          target="_blank"
+          class="action-button">
+          <ion-icon name="logo-whatsapp" slot="start"></ion-icon>
+          Escribir por WhatsApp
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

@@ -1,0 +1,83 @@
+.custom-tab-bar {
+  --background: rgba(255, 255, 255, 0.9);
+  --border: none;
+  display: flex;
+  justify-content: space-evenly;
+  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(12px);
+  font-family: 'Poppins', sans-serif;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  overflow: hidden;
+  height: 70px;
+
+  @media (prefers-color-scheme: dark) {
+    --background: rgba(37, 42, 52, 0.95);
+  }
+}
+
+.tab-btn {
+  --color: #929292;
+  --color-selected: #FF2E63;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+  font-weight: 500;
+  height: 100%;
+  padding-top: 6px;
+
+  ion-icon {
+    font-size: 21px; // más grande
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+
+  ion-label {
+    font-size: 12px;
+    margin-top: 4px;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    ion-icon {
+      transform: scale(1.1);
+    }
+    ion-label {
+      color: #FF2E63;
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.tab-selected {
+    ion-icon {
+      color: #FF2E63;
+    }
+    ion-label {
+      font-weight: 600;
+      color: #FF2E63;
+    }
+  }
+}
+
+.badge-carrito {
+  position: absolute;
+  top: 4px;
+  right: 16px;
+  font-size: 11px;
+  z-index: 2;
+  border-radius: 50%;
+  min-width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

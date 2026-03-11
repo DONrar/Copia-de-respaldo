@@ -1,0 +1,147 @@
+<ion-content class="ion-padding carrito-content">
+  <!-- Header del carrito -->
+  <div class="carrito-header">
+    <h1>Tu Carrito</h1>
+    <p *ngIf="carrito.length > 0" class="items-count">
+      {{ getTotalItems() }} producto{{ getTotalItems() !== 1 ? 's' : '' }} en tu pedido
+    </p>
+  </div>
+
+  <!-- Carrito vacío -->
+  <div *ngIf="carrito.length === 0" class="carrito-vacio fade-in">
+    <div class="empty-state">
+      <ion-icon name="cart-outline" class="carrito-icon"></ion-icon>
+      <h2>Tu carrito está vacío</h2>
+      <p class="texto-vacio">Aún no has seleccionado ningún producto</p>
+      <ion-button expand="block" color="primary" routerLink="/productos" class="btn-continuar">
+        <ion-icon name="storefront-outline" slot="start"></ion-icon>
+        Explorar Productos
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Carrito con productos -->
+  <div *ngIf="carrito.length > 0" class="carrito-contenido">
+    <ion-list class="fade-in lista-productos">
+      <ion-item-sliding *ngFor="let item of carrito; let i = index" class="producto-item">
+        <ion-item class="item-producto" lines="none">
+          <ion-thumbnail slot="start" class="producto-thumbnail">
+            <img [src]="item.producto.imagen" [alt]="item.producto.nombre" />
+          </ion-thumbnail>
+
+          <ion-label class="info-producto">
+            <h3 class="producto-nombre">{{ item.producto.nombre }}</h3>
+            <p *ngIf="item.producto.presentacion" class="presentacion">
+              {{ item.producto.presentacion }}
+            </p>
+            <p class="precio-unitario">${{ getPrecioProducto(item.producto) }} c/u</p>
+            <div class="subtotal">
+              <span class="subtotal-text">Subtotal:</span>
+              <span class="subtotal-precio">${{ (getPrecioProducto(item.producto) * item.cantidad).toFixed(2) }}</span>
+            </div>
+          </ion-label>
+
+          <!-- Controles de cantidad -->
+          <div class="cantidad-controls" slot="end">
+            <div class="cantidad-selector">
+              <ion-button fill="clear" color="medium" size="small"
+                         (click)="modificarCantidad(i, -1)"
+                         [disabled]="item.cantidad <= 1"
+                         class="btn-cantidad">
+                <ion-icon name="remove-outline"></ion-icon>
+              </ion-button>
+
+              <div class="cantidad-display">
+                <span class="cantidad-number">{{ item.cantidad }}</span>
+              </div>
+
+              <ion-button fill="clear" color="primary" size="small"
+                         (click)="modificarCantidad(i, 1)"
+                         class="btn-cantidad">
+                <ion-icon name="add-outline"></ion-icon>
+              </ion-button>
+            </div>
+
+            <ion-button fill="clear" color="danger" size="small"
+                       (click)="eliminarProducto(i)"
+                       class="btn-eliminar">
+              <ion-icon name="trash-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </ion-item>
+
+        <ion-item-options side="end">
+          <ion-item-option color="danger" expandable (click)="eliminarProducto(i)">
+            <ion-icon name="trash" slot="icon-only" size="large"></ion-icon>
+            Eliminar
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+
+    <!-- Resumen del pedido -->
+    <ion-card class="card-resumen fade-in-up">
+      <ion-card-header>
+        <ion-card-title>Resumen del Pedido</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="resumen-linea">
+          <span>Subtotal:</span>
+          <span>${{ total.toFixed(2) }}</span>
+        </div>
+        <div class="resumen-linea">
+          <span>Envío:</span>
+          <span class="envio-gratis">Gratis</span>
+        </div>
+        <div class="resumen-linea total">
+          <strong>Total:</strong>
+          <strong class="total-precio">${{ total.toFixed(2) }}</strong>
+        </div>
+
+        <div class="acciones-carrito">
+          <ion-button expand="block" color="success" [href]="linkWhatsApp" target="_blank"
+                     class="btn-whatsapp" [disabled]="carrito.length === 0">
+            <ion-icon name="logo-whatsapp" slot="start"></ion-icon>
+            Confirmar Pedido por WhatsApp
+          </ion-button>
+
+          <div class="acciones-secundarias">
+            <ion-button expand="block" fill="outline" color="primary" routerLink="/productos">
+              <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+              Seguir Comprando
+            </ion-button>
+
+            <ion-button expand="block" fill="outline" color="danger" (click)="mostrarConfirmacionVaciar()">
+              <ion-icon name="trash-outline" slot="start"></ion-icon>
+              Vaciar Todo
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Información adicional -->
+    <div class="info-adicional">
+      <ion-card class="card-info">
+        <ion-card-content>
+          <div class="info-item">
+            <ion-icon name="time-outline" color="primary"></ion-icon>
+            <div>
+              <strong>Horario de atención:</strong>
+              <p>Lunes a Sábado: 8:00 AM - 6:00 PM</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <ion-icon name="location-outline" color="primary"></ion-icon>
+            <div>
+              <strong>Entrega a domicilio:</strong>
+              <p>Disponible en zona de cobertura</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

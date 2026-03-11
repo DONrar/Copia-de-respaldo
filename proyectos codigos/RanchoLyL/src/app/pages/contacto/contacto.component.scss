@@ -1,0 +1,213 @@
+/* contacto.component.scss */
+:host {
+  --ion-color-primary: #1e88e5;
+  --ion-color-primary-rgb: 30, 136, 229;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #1a7ac7;
+  --ion-color-primary-tint: #3594e8;
+}
+
+.estado-card {
+  margin: 16px 0;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(30, 136, 229, 0.15);
+
+  .estado-content {
+    padding: 20px;
+  }
+
+  .status-indicator {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+
+    &.abierto {
+      background: rgba(76, 175, 80, 0.1);
+    }
+
+    .estado-icon {
+      font-size: 32px;
+    }
+  }
+
+  .estado-titulo {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin: 8px 0 4px;
+    color: #2c3e50;
+  }
+
+  .estado-subtitulo {
+    font-size: 0.9em;
+    color: #7f8c8d;
+    margin: 0;
+  }
+}
+
+.card-header-blue {
+  background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+
+  ion-card-title {
+    color: white;
+    font-size: 1.1em;
+    font-weight: 600;
+
+    .header-icon {
+      margin-right: 8px;
+      font-size: 1.2em;
+    }
+  }
+}
+
+.horarios-card {
+  border-radius: 12px;
+  margin: 20px 0;
+
+  .hoy-destacado {
+    background: rgba(30, 136, 229, 0.05);
+    border-radius: 8px;
+    padding: 8px;
+
+    .hoy-item {
+      --background: transparent;
+
+      ion-label {
+        p {
+          margin: 4px 0 0;
+          color: #2c3e50;
+        }
+      }
+    }
+  }
+
+  .cerrado-text {
+    color: #e74c3c;
+    font-style: italic;
+  }
+}
+
+.horarios-accordion {
+  .custom-accordion {
+    .accordion-header {
+      --background: #f8f9fa;
+      border-radius: 8px;
+      margin-top: 12px;
+
+      .accordion-arrow {
+        transition: transform 0.3s ease;
+      }
+    }
+
+    &[expanded] .accordion-arrow {
+      transform: rotate(180deg);
+    }
+  }
+
+  .horarios-list {
+    .horario-item {
+      --padding-start: 0;
+      --inner-padding-end: 0;
+      margin: 4px 0;
+
+      &.hoy {
+        --background: rgba(255, 193, 7, 0.1);
+        border-radius: 8px;
+      }
+
+      .dia-hoy {
+        color: #e67e22;
+      }
+
+      ion-label {
+        p {
+          margin: 2px 0 0;
+          color: #7f8c8d;
+          font-size: 0.9em;
+        }
+      }
+    }
+  }
+}
+
+.contacto-card {
+  border-radius: 12px;
+  margin: 20px 0;
+
+  .contacto-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    margin: 16px 0;
+
+    ion-label {
+      h3 {
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0 0 4px;
+        font-size: 0.95em;
+      }
+
+      p {
+        margin: 0;
+        color: #5a6c7d;
+        font-size: 0.9em;
+      }
+    }
+  }
+
+  .botones-contacto {
+    margin-top: 20px;
+
+    .action-button {
+      margin: 8px 0;
+      --border-radius: 8px;
+      font-weight: 500;
+    }
+  }
+}
+
+/* Animaciones */
+.fade-in {
+  animation: fadeIn 0.6s ease-in;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .estado-card .estado-content {
+    padding: 16px;
+  }
+
+  .status-indicator {
+    width: 50px;
+    height: 50px;
+
+    .estado-icon {
+      font-size: 28px;
+    }
+  }
+}

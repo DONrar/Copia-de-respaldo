@@ -1,0 +1,5 @@
+nota,diagnostico,regla,cf
+2.8,Debes estudiar más.,R_MENOR_3,1.00
+3.2,"Vas bien, pero puedes mejorar.",R_ENTRE_3_Y_4,0.95
+4.5,Excelente desempeño.,R_MAYOR_IGUAL_4,0.90
+5.1,ERROR: La nota debe estar entre 0.0 y 5.0.,,

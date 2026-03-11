@@ -1,0 +1,50 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom" class="custom-tab-bar">
+
+    <ion-tab-button
+  tab="inicio"
+  routerLink="/"
+  routerLinkActive="tab-selected"
+  [routerLinkActiveOptions]="{ exact: true }"
+  class="tab-btn">
+  <ion-icon name="home-outline"></ion-icon>
+  <ion-label>Inicio</ion-label>
+</ion-tab-button>
+
+<ion-tab-button
+  tab="menu"
+  routerLink="/menu"
+  routerLinkActive="tab-selected"
+  [routerLinkActiveOptions]="{ exact: true }"
+  class="tab-btn">
+  <ion-icon name="fast-food-outline"></ion-icon>
+  <ion-label>Menú</ion-label>
+</ion-tab-button>
+
+<ion-tab-button
+  tab="contacto"
+  routerLink="/contacto"
+  routerLinkActive="tab-selected"
+  [routerLinkActiveOptions]="{ exact: true }"
+  class="tab-btn">
+  <ion-icon name="call-outline"></ion-icon>
+  <ion-label>Contacto</ion-label>
+</ion-tab-button>
+
+<ion-tab-button
+  tab="carrito"
+  routerLink="/carrito"
+  routerLinkActive="tab-selected"
+  [routerLinkActiveOptions]="{ exact: true }"
+  class="tab-btn">
+  <ion-icon id="icono-carrito" name="cart-outline"></ion-icon>
+  <ion-label>Carrito</ion-label>
+  <ion-badge color="danger" class="badge-carrito" *ngIf="totalProductos > 0">
+    {{ totalProductos }}
+  </ion-badge>
+</ion-tab-button>
+
+
+
+  </ion-tab-bar>
+</ion-tabs>

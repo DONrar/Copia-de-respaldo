@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Deudores</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="form" (ngSubmit)="add()">
+    <ion-item>
+      <ion-label position="stacked">Nombre del deudor</ion-label>
+      <ion-input formControlName="name" placeholder="Ej: José María Córdoba"></ion-input>
+    </ion-item>
+    <ion-button class="ion-margin-top" type="submit" [disabled]="form.invalid">Guardar</ion-button>
+  </form>
+
+  <ion-list class="ion-margin-top">
+    <ion-item *ngFor="let d of debtors()">
+      <ion-label>
+        <div><strong>{{ d.name }}</strong></div>
+        <small>Creado: {{ d.createdAt | date:'medium' }}</small>
+      </ion-label>
+      <ion-button [routerLink]="['/deuda/nueva']" [queryParams]="{ debtorId: d.id }">Nueva deuda</ion-button>
+      <ion-button fill="clear" color="medium" (click)="remove(d.id)">Eliminar</ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

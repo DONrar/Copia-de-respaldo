@@ -1,0 +1,130 @@
+<ion-content class="ion-padding contenido-productos">
+
+  <!-- 🔍 Buscador -->
+  <ion-searchbar class="search" [(ngModel)]="filtro" placeholder="Buscar producto..." animated></ion-searchbar>
+
+  <!-- 📂 Categorías -->
+  <ion-segment [(ngModel)]="categoriaSeleccionada" scrollable class="segmento-categorias">
+    <ion-segment-button value="">Todos</ion-segment-button>
+    <ion-segment-button *ngFor="let cat of categorias" [value]="cat">
+      {{ cat }}
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- 🧾 Lista de productos -->
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md="6" *ngFor="let item of productosFiltrados" class="fade-in-up">
+        <ion-card class="producto-card compacto-hover">
+          <img [src]="item.imagen" [alt]="item.nombre" class="producto-img" />
+          <ion-card-header>
+            <ion-card-title>{{ item.nombre }}</ion-card-title>
+            <ion-card-subtitle>${{ item.precio }}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <p>{{ item.descripcion }}</p>
+            <ion-button expand="block" color="success" (click)="agregarAlCarrito(item, $event)">
+              <span *ngIf="!esHamburguesa(item.categoria) && !esJugoNatural(item.nombre)">Agregar</span>
+              <span *ngIf="esHamburguesa(item.categoria)">Elegir Presentación</span>
+              <span *ngIf="esJugoNatural(item.nombre)">Elegir Sabor</span>
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Modal para selección de presentación -->
+  <ion-modal [isOpen]="isModalOpen" (didDismiss)="cerrarModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title *ngIf="productoSeleccionado && esHamburguesa(productoSeleccionado.categoria)">
+            Seleccionar Presentación
+          </ion-title>
+          <ion-title *ngIf="productoSeleccionado && esJugoNatural(productoSeleccionado.nombre)">
+            Seleccionar Sabor
+          </ion-title>
+          <ion-button slot="end" fill="clear" (click)="cerrarModal()">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+        <div *ngIf="productoSeleccionado">
+          <div class="producto-modal-info">
+            <img [src]="productoSeleccionado.imagen" [alt]="productoSeleccionado.nombre" class="modal-img" />
+            <h2>{{ productoSeleccionado.nombre }}</h2>
+            <p>{{ productoSeleccionado.descripcion }}</p>
+          </div>
+
+          <!-- Sección para hamburguesas -->
+          <div *ngIf="esHamburguesa(productoSeleccionado.categoria)">
+            <h3>Elige tu presentación:</h3>
+            <ion-radio-group [(ngModel)]="presentacionSeleccionada">
+              <ion-list>
+                <ion-item *ngFor="let presentacion of presentaciones">
+                  <ion-radio slot="start" [value]="presentacion.value"></ion-radio>
+                  <ion-label>
+                    <h3>{{ presentacion.label }}</h3>
+                    <p *ngIf="presentacion.precioAdicional > 0">
+                      +${{ presentacion.precioAdicional }}
+                    </p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-radio-group>
+          </div>
+
+          <!-- Sección para jugos naturales -->
+          <div *ngIf="esJugoNatural(productoSeleccionado.nombre)">
+            <h3>Elige tu sabor:</h3>
+            <ion-radio-group [(ngModel)]="saborSeleccionado">
+              <ion-list>
+                <ion-item *ngFor="let sabor of saboresJugos">
+                  <ion-radio slot="start" [value]="sabor.value"></ion-radio>
+                  <ion-label>
+                    <h3>{{ sabor.label }}</h3>
+                    <p *ngIf="sabor.precioAdicional > 0">
+                      +${{ sabor.precioAdicional }}
+                    </p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-radio-group>
+          </div>
+
+          <!-- Sección para sodas -->
+          <div *ngIf="esSoda(productoSeleccionado.nombre)">
+            <h3>Elige tu sabor:</h3>
+            <ion-radio-group [(ngModel)]="saborSodaSeleccionado">
+              <ion-list>
+                <ion-item *ngFor="let sabor of saboresSodas">
+                  <ion-radio slot="start" [value]="sabor.value"></ion-radio>
+                  <ion-label>
+                    <h3>{{ sabor.label }}</h3>
+                    <p *ngIf="sabor.precioAdicional > 0">+${{ sabor.precioAdicional }}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-radio-group>
+          </div>
+
+
+          <div class="precio-total">
+            <h2>Total: ${{ getPrecioConPresentacion() }}</h2>
+          </div>
+
+          <ion-button expand="block" color="success" (click)="esHamburguesa(productoSeleccionado.categoria) ? confirmarPresentacion() :
+          esJugoNatural(productoSeleccionado.nombre) ? confirmarSabor() :
+          confirmarSoda()" [disabled]="!presentacionSeleccionada && !saborSeleccionado && !saborSodaSeleccionado">
+            Agregar al Carrito
+          </ion-button>
+
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

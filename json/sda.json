@@ -1,0 +1,19 @@
+HISTORY (List): [Product{id='A-100', name='Café', category='Bebidas'},
+                 Product{id='B-200', name='Pan', category='Panadería'},
+                 Product{id='A-100', name='Café Premium', category='Bebidas'
+    }
+]
+UNIQUE (Set): [Product{id='B-200', name='Pan', category='Panadería'
+    }, Product{id='A-100', name='Café Premium', category='Bebidas'
+    }, Product{id='A-100', name='Café', category='Bebidas'
+    }
+]
+BY ID (Map): {B-200=Product{id='B-200', name='Pan', category='Panadería'
+    }, A-100=Product{id='A-100', name='Café Premium', category='Bebidas'
+    }
+}
+Ordenado por id a traves de Treemap: {A-100=Product{id='A-100', name='Café Premium', category='Bebidas'
+    }, B-200=Product{id='B-200', name='Pan', category='Panadería'
+    }
+}
+No puedes modificar una vista inmutable de la lista.

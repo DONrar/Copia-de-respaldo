@@ -1,0 +1,7 @@
+{
+  "name": "sistema-experto-ionic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

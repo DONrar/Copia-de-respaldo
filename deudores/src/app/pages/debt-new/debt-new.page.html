@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/"></ion-back-button></ion-buttons>
+    <ion-title>Nueva deuda</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="form" (ngSubmit)="save()">
+
+    <ion-item>
+      <ion-label position="stacked">Deudor</ion-label>
+      <ion-select formControlName="debtorId" interface="popover" placeholder="Selecciona un deudor">
+        <ion-select-option *ngFor="let d of debtors()" [value]="d.id">{{ d.name }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Fecha</ion-label>
+      <ion-input type="date" formControlName="date"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Nota (opcional)</ion-label>
+      <ion-input formControlName="note" placeholder="Ej: Entrega del 3 de nov"></ion-input>
+    </ion-item>
+
+    <ion-note class="ion-margin-top"><strong>Ítems</strong></ion-note>
+
+    <ion-list formArrayName="items" class="ion-margin-top">
+      <div *ngFor="let row of items.controls; let i = index" [formGroupName]="i" class="ion-margin-bottom">
+        <ion-item>
+          <ion-label position="stacked">Producto</ion-label>
+          <ion-input formControlName="product" placeholder="Arroz, aceite..."></ion-input>
+        </ion-item>
+
+        <div class="grid">
+          <ion-item>
+            <ion-label position="stacked">Cantidad</ion-label>
+            <ion-input type="number" inputmode="decimal" formControlName="qty"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">V. unitario</ion-label>
+            <ion-input type="number" inputmode="decimal" formControlName="unitPrice"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Total</ion-label>
+            <ion-input [value]="row.value.total | number:'1.2-2'" readonly></ion-input>
+          </ion-item>
+        </div>
+
+        <ion-buttons class="ion-justify-content-between ion-padding-top">
+          <ion-button fill="outline" color="medium" (click)="removeItem(i)" [disabled]="items.length === 1">Eliminar</ion-button>
+          <ion-button fill="clear" (click)="duplicateItem(i)">Duplicar</ion-button>
+        </ion-buttons>
+
+        <hr />
+      </div>
+    </ion-list>
+
+    <ion-button expand="block" class="ion-margin-top" (click)="addItem()">Agregar ítem</ion-button>
+
+    <ion-item class="ion-margin-top">
+      <ion-label><strong>Total deuda</strong></ion-label>
+      <ion-note slot="end"><strong>{{ grandTotal() | currency:'COP':'symbol-narrow' }}</strong></ion-note>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="form.invalid || items.length === 0">Guardar deuda</ion-button>
+  </form>
+
+  <ion-note class="ion-margin-top" *ngIf="debtors().length === 0">
+    No hay deudores aún. <a [routerLink]="['/']">Crea uno en Home</a>.
+  </ion-note>
+</ion-content>

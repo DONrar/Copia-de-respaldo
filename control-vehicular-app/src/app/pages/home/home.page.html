@@ -1,0 +1,239 @@
+<!-- src/app/pages/home/home.page.html -->
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      <ion-icon name="shield-checkmark-outline"></ion-icon>
+      Control de Acceso
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <!-- Usuario Actual -->
+  <div class="user-info" *ngIf="usuarioActual && !personaInfo">
+    <ion-chip color="primary">
+      <ion-icon name="person-circle-outline"></ion-icon>
+      <ion-label>{{ usuarioActual }}</ion-label>
+    </ion-chip>
+  </div>
+
+  <!-- Botón de Escaneo -->
+  <div class="scan-container" *ngIf="!personaInfo && !scanActive">
+    <div class="scan-icon-container">
+      <ion-icon name="qr-code-outline" class="scan-icon"></ion-icon>
+    </div>
+
+    <h2 class="ion-text-center">Escanear Código QR</h2>
+    <p class="ion-text-center scan-description">
+      Presione el botón para escanear el código QR del conductor
+    </p>
+
+    <ion-button
+      expand="block"
+      size="large"
+      (click)="escanearQR()"
+      color="success"
+      class="scan-button">
+      <ion-icon name="qr-code-outline" slot="start"></ion-icon>
+      Escanear QR
+    </ion-button>
+  </div>
+
+  <!-- Indicador de Escaneo Activo -->
+  <div class="scanning-indicator" *ngIf="scanActive">
+    <ion-spinner name="crescent" color="light"></ion-spinner>
+    <p>Apunte la cámara al código QR</p>
+  </div>
+
+  <!-- Información de la Persona -->
+  <div class="persona-info-container" *ngIf="personaInfo">
+
+    <!-- Card Principal - Datos Persona -->
+    <ion-card class="persona-card">
+      <ion-card-header>
+        <div class="persona-header">
+          <ion-avatar *ngIf="personaInfo.persona.foto; else noPhoto">
+            <img [src]="personaInfo.persona.foto" />
+          </ion-avatar>
+          <ng-template #noPhoto>
+            <ion-avatar class="no-photo-avatar">
+              <ion-icon name="person-circle-outline"></ion-icon>
+            </ion-avatar>
+          </ng-template>
+
+          <div class="persona-details">
+            <ion-card-title>{{ personaInfo.persona.nombre }}</ion-card-title>
+            <ion-card-subtitle>
+              <ion-icon name="card-outline"></ion-icon>
+              {{ personaInfo.persona.documento }}
+            </ion-card-subtitle>
+            <ion-card-subtitle>
+              <ion-icon name="home-outline"></ion-icon>
+              {{ personaInfo.persona.torre }} - Apto {{ personaInfo.persona.apartamento }}
+            </ion-card-subtitle>
+          </div>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <!-- Estado de Pago -->
+        <div class="estado-pago-container">
+          <ion-chip [color]="getEstadoPagoColor()" class="estado-chip">
+            <ion-icon [name]="getEstadoPagoIcon()"></ion-icon>
+            <ion-label>{{ personaInfo.estadoPago.mensaje }}</ion-label>
+          </ion-chip>
+        </div>
+
+        <!-- Mensaje General -->
+        <ion-text [color]="personaInfo.puedeIngresarSalir ? 'success' : 'danger'">
+          <p class="ion-text-center mensaje-principal">
+            <ion-icon [name]="personaInfo.puedeIngresarSalir ? 'checkmark-circle' : 'close-circle'"></ion-icon>
+            {{ personaInfo.mensaje }}
+          </p>
+        </ion-text>
+
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Card Vehículos -->
+    <ion-card class="vehiculos-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="car-outline"></ion-icon>
+          Vehículos Autorizados
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <!-- Lista de Vehículos -->
+        <ion-radio-group [(ngModel)]="placaSeleccionada" *ngIf="personaInfo.vehiculos.length > 0">
+          <ion-list class="vehiculos-list">
+            <ion-item
+              *ngFor="let vehiculo of personaInfo.vehiculos"
+              [class.vehiculo-selected]="placaSeleccionada === vehiculo.placa"
+              lines="full">
+
+              <ion-icon
+                name="car-outline"
+                slot="start"
+                [color]="vehiculo.vigente ? 'primary' : 'medium'">
+              </ion-icon>
+
+              <ion-label>
+                <h2 class="vehiculo-placa">{{ vehiculo.placa }}</h2>
+                <p class="vehiculo-info">
+                  {{ vehiculo.marca }} {{ vehiculo.modelo }}
+                </p>
+                <p class="vehiculo-color">
+                  <ion-icon name="color-palette-outline"></ion-icon>
+                  {{ vehiculo.color }}
+                </p>
+                <ion-badge [color]="vehiculo.rol === 'PROPIETARIO' ? 'success' : 'tertiary'" class="vehiculo-rol">
+                  {{ vehiculo.rol === 'PROPIETARIO' ? 'Propietario' : 'Conductor Autorizado' }}
+                </ion-badge>
+              </ion-label>
+
+              <ion-radio slot="end" [value]="vehiculo.placa"></ion-radio>
+            </ion-item>
+          </ion-list>
+        </ion-radio-group>
+
+        <!-- Sin vehículos -->
+        <ion-text color="danger" *ngIf="personaInfo.vehiculos.length === 0">
+          <div class="no-vehiculos">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <p>Esta persona no tiene vehículos autorizados</p>
+          </div>
+        </ion-text>
+
+        <!-- Tipo de Movimiento -->
+        <div class="movimiento-selector" *ngIf="personaInfo.vehiculos.length > 0">
+          <ion-segment [(ngModel)]="tipoMovimiento" mode="ios">
+            <ion-segment-button value="ENTRADA">
+              <ion-icon name="arrow-forward-circle"></ion-icon>
+              <ion-label>Entrada</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="SALIDA">
+              <ion-icon name="arrow-back-circle"></ion-icon>
+              <ion-label>Salida</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="action-buttons" *ngIf="personaInfo.vehiculos.length > 0">
+          <ion-button
+            expand="block"
+            [color]="tipoMovimiento === 'ENTRADA' ? 'success' : 'warning'"
+            (click)="registrarMovimiento()"
+            [disabled]="!placaSeleccionada || !tipoMovimiento"
+            class="action-button-primary">
+            <ion-icon
+              [name]="tipoMovimiento === 'ENTRADA' ? 'arrow-forward-circle' : 'arrow-back-circle'"
+              slot="start">
+            </ion-icon>
+            Registrar {{ tipoMovimiento }}
+          </ion-button>
+
+          <ion-button
+            expand="block"
+            fill="outline"
+            color="medium"
+            (click)="cancelar()"
+            class="action-button-secondary">
+            <ion-icon name="close-circle" slot="start"></ion-icon>
+            Cancelar
+          </ion-button>
+        </div>
+
+        <!-- Botón Cancelar si no hay vehículos -->
+        <div class="action-buttons" *ngIf="personaInfo.vehiculos.length === 0">
+          <ion-button
+            expand="block"
+            fill="outline"
+            color="medium"
+            (click)="cancelar()">
+            <ion-icon name="close-circle" slot="start"></ion-icon>
+            Cerrar
+          </ion-button>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Último Movimiento (si existe) -->
+    <ion-card class="ultimo-movimiento-card" *ngIf="personaInfo.ultimoMovimiento">
+      <ion-card-header>
+        <ion-card-subtitle>Último Movimiento</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="ultimo-movimiento-info">
+          <ion-chip [color]="personaInfo.ultimoMovimiento.tipoMovimiento === 'ENTRADA' ? 'success' : 'warning'">
+            <ion-icon
+              [name]="personaInfo.ultimoMovimiento.tipoMovimiento === 'ENTRADA' ? 'arrow-forward-circle' : 'arrow-back-circle'">
+            </ion-icon>
+            <ion-label>{{ personaInfo.ultimoMovimiento.tipoMovimiento }}</ion-label>
+          </ion-chip>
+          <p>
+            <strong>{{ personaInfo.ultimoMovimiento.placaVehiculo }}</strong> -
+            {{ personaInfo.ultimoMovimiento.marcaVehiculo }}
+          </p>
+          <p class="fecha-movimiento">
+            <ion-icon name="time-outline"></ion-icon>
+            {{ personaInfo.ultimoMovimiento.fechaHora | date:'dd/MM/yyyy HH:mm' }}
+          </p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+</ion-content>

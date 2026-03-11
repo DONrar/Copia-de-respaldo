@@ -1,0 +1,424 @@
+.container {
+  padding: 16px;
+  padding-bottom: 80px;
+  background: #f8f9fa;
+  min-height: 100%;
+}
+
+/* Tarjetas generales */
+.info-card, .products-card, .summary-card, .payments-card, .empty-payments {
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  margin-bottom: 16px;
+}
+
+.card-header-custom {
+  padding-bottom: 8px;
+}
+
+.card-header-custom ion-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #132440;
+}
+
+.title-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(59, 151, 151, 0.1);
+
+  ion-icon {
+    font-size: 20px;
+    color: #3B9797;
+  }
+}
+
+/* Información del cliente */
+.header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.cliente-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.cliente-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #16476A 0%, #3B9797 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.cliente-details {
+  flex: 1;
+}
+
+.cliente-nombre {
+  font-size: 18px;
+  font-weight: 600;
+  color: #132440;
+  margin: 0 0 8px 0;
+}
+
+.fecha-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #666;
+}
+
+.fecha-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+
+  ion-icon {
+    font-size: 16px;
+    color: #3B9797;
+  }
+}
+
+.status-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+
+  &.pendiente {
+    background: rgba(191, 9, 47, 0.1);
+    color: #BF092F;
+  }
+
+  &.pagada {
+    background: rgba(59, 151, 151, 0.1);
+    color: #3B9797;
+  }
+}
+
+.notas-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(59, 151, 151, 0.05);
+  border-radius: 12px;
+  border-left: 4px solid #3B9797;
+}
+
+.notas-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+
+  ion-icon {
+    font-size: 16px;
+    color: #3B9797;
+  }
+}
+
+.notas-text {
+  flex: 1;
+  font-size: 14px;
+  color: #132440;
+  line-height: 1.4;
+}
+
+/* Lista de productos */
+.products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.product-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.product-info {
+  flex: 1;
+}
+
+.product-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #132440;
+  margin: 0 0 4px 0;
+}
+
+.product-details {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
+
+.product-total {
+  font-size: 15px;
+  font-weight: 700;
+  color: #16476A;
+}
+
+/* Resumen financiero */
+.summary-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #132440;
+  margin: 0 0 16px 0;
+  text-align: center;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+
+  &.total-pendiente {
+    margin-bottom: 0;
+  }
+}
+
+.summary-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.summary-value {
+  font-size: 15px;
+  font-weight: 600;
+
+  &.total-deuda {
+    color: #132440;
+  }
+
+  &.abonado {
+    color: #3B9797;
+  }
+
+  &.pendiente {
+    color: #BF092F;
+
+    &.cero {
+      color: #3B9797;
+    }
+  }
+}
+
+.summary-divider {
+  height: 1px;
+  background: #f0f0f0;
+  margin: 16px 0;
+}
+
+/* Historial de pagos */
+.payments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.payment-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(59, 151, 151, 0.05);
+  border-radius: 12px;
+  border-left: 4px solid #3B9797;
+}
+
+.payment-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(59, 151, 151, 0.1);
+
+  ion-icon {
+    font-size: 18px;
+    color: #3B9797;
+  }
+}
+
+.payment-info {
+  flex: 1;
+}
+
+.payment-amount {
+  font-size: 16px;
+  font-weight: 700;
+  color: #132440;
+  margin-bottom: 2px;
+}
+
+.payment-date {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.payment-notes {
+  font-size: 13px;
+  color: #3B9797;
+  font-style: italic;
+}
+
+/* Estado vacío de pagos */
+.empty-payments {
+  text-align: center;
+}
+
+.empty-content {
+  padding: 20px;
+}
+
+.empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(59, 151, 151, 0.1);
+  margin: 0 auto 16px;
+
+  ion-icon {
+    font-size: 32px;
+    color: #3B9797;
+  }
+}
+
+.empty-content h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #132440;
+  margin: 0 0 8px 0;
+}
+
+.empty-content p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+/* Botón de acción */
+.action-section {
+  padding: 16px 0;
+}
+
+.btn-payment {
+  --background: #BF092F;
+  --background-activated: #132440;
+  --background-hover: #16476A;
+  --color: white;
+  --border-radius: 14px;
+  --box-shadow: 0 4px 12px rgba(191, 9, 47, 0.3);
+  font-weight: 600;
+  height: 56px;
+  margin: 0;
+
+  &:hover {
+    --box-shadow: 0 6px 16px rgba(191, 9, 47, 0.4);
+  }
+}
+
+/* Estado de deuda pagada */
+.paid-status {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.paid-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(59, 151, 151, 0.1);
+  margin: 0 auto 20px;
+
+  ion-icon {
+    font-size: 48px;
+    color: #3B9797;
+  }
+}
+
+.paid-status h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #132440;
+  margin: 0 0 8px 0;
+}
+
+.paid-status p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .container {
+    padding: 12px;
+    padding-bottom: 80px;
+  }
+
+  .cliente-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+  }
+
+  .cliente-nombre {
+    font-size: 16px;
+  }
+
+  .header-main {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .status-badge {
+    align-self: flex-start;
+  }
+}

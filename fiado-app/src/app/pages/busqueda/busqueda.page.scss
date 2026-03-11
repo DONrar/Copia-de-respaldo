@@ -1,0 +1,498 @@
+.container {
+  padding: 16px;
+  padding-bottom: 80px;
+  background: #f8f9fa;
+  min-height: 100%;
+}
+
+/* Searchbar personalizado */
+.custom-searchbar {
+  --box-shadow: 0 2px 8px rgba(19, 36, 64, 0.1);
+  margin: 8px 0;
+}
+
+/* Segment personalizado */
+.custom-segment {
+  --background: transparent;
+}
+
+.segment-btn {
+  --background: transparent;
+  --background-checked: #16476A;
+  --color: #666;
+  --color-checked: white;
+  --border-radius: 12px;
+  margin: 0 4px;
+  min-height: 40px;
+}
+
+.segment-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  ion-icon {
+    font-size: 16px;
+  }
+
+  ion-label {
+    font-size: 12px;
+    font-weight: 500;
+  }
+}
+
+/* Barra de acciones */
+.actions-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 4px;
+}
+
+.actions-left, .actions-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-filter {
+  --border-color: #16476A;
+  --color: #16476A;
+  --border-radius: 10px;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.filter-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  background: #BF092F;
+  border-radius: 50%;
+}
+
+.btn-action {
+  --color: #16476A;
+  --border-radius: 8px;
+  width: 48px;
+  height: 48px;
+
+  ion-icon {
+    font-size: 18px;
+  }
+}
+
+/* Contenedor de vistas */
+.view-container {
+  margin-bottom: 20px;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 0 4px;
+}
+
+.results-count {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.btn-clear {
+  --color: #BF092F;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Tarjetas de deudas */
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.deuda-card {
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+  }
+}
+
+.deuda-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.cliente-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.cliente-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #16476A 0%, #3B9797 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.cliente-details {
+  flex: 1;
+}
+
+.cliente-nombre {
+  font-size: 15px;
+  font-weight: 600;
+  color: #132440;
+  margin: 0 0 4px 0;
+}
+
+.deuda-fecha {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+}
+
+.status-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 12px;
+
+  &.pendiente {
+    background: rgba(191, 9, 47, 0.1);
+    color: #BF092F;
+  }
+
+  &.pagada {
+    background: rgba(59, 151, 151, 0.1);
+    color: #3B9797;
+  }
+}
+
+.deuda-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.productos-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #666;
+}
+
+.productos-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+
+  ion-icon {
+    font-size: 14px;
+    color: #16476A;
+  }
+}
+
+.montos-info {
+  text-align: right;
+}
+
+.monto-total, .monto-pendiente {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.monto-label {
+  color: #666;
+}
+
+.monto-value {
+  font-weight: 600;
+  color: #132440;
+}
+
+.monto-pendiente .monto-value {
+  color: #BF092F;
+}
+
+/* Tarjetas de clientes */
+.cliente-card {
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+  }
+}
+
+.cliente-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.cliente-avatar-main {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #16476A 0%, #3B9797 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.cliente-info-main {
+  flex: 1;
+}
+
+.cliente-nombre {
+  font-size: 16px;
+  font-weight: 600;
+  color: #132440;
+  margin: 0 0 4px 0;
+}
+
+.cliente-telefono {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+
+  ion-icon {
+    font-size: 14px;
+    color: #3B9797;
+  }
+}
+
+.cliente-saldo-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.saldo-label {
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+.saldo-amount {
+  font-size: 15px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 16px;
+
+  &.deuda {
+    background: rgba(191, 9, 47, 0.1);
+    color: #BF092F;
+  }
+
+  &.saldo-cero {
+    background: rgba(59, 151, 151, 0.1);
+    color: #3B9797;
+  }
+}
+
+/* Estados vacíos */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(59, 151, 151, 0.1);
+  margin-bottom: 20px;
+
+  ion-icon {
+    font-size: 40px;
+    color: #3B9797;
+  }
+}
+
+.empty-state h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #132440;
+}
+
+.empty-state p {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.btn-clear-filters {
+  --border-color: #BF092F;
+  --color: #BF092F;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Modal de filtros */
+.filters-modal .modal-wrapper {
+  border-radius: 20px 20px 0 0;
+}
+
+.filtros-container {
+  padding: 16px;
+  padding-bottom: 40px;
+}
+
+.filter-card {
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 16px;
+}
+
+.filter-header {
+  padding-bottom: 8px;
+}
+
+.filter-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #132440;
+
+  ion-icon {
+    font-size: 18px;
+    color: #16476A;
+  }
+}
+
+.filter-segment {
+  --background: #f8f9fa;
+}
+
+.filter-segment-btn {
+  --background: transparent;
+  --background-checked: #16476A;
+  --color: #666;
+  --color-checked: white;
+  --border-radius: 8px;
+  min-height: 36px;
+  font-size: 13px;
+}
+
+.date-inputs, .amount-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.date-input-group, .amount-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.date-label, .amount-label {
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+.date-input, .amount-input {
+  --background: #f8f9fa;
+  --border-radius: 8px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  font-size: 14px;
+}
+
+.filter-actions {
+  margin-top: 24px;
+}
+
+.btn-clear-all {
+  --border-color: #BF092F;
+  --color: #BF092F;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .container {
+    padding: 12px;
+    padding-bottom: 80px;
+  }
+
+  .actions-bar {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .actions-left, .actions-right {
+    justify-content: center;
+  }
+
+  .cliente-avatar, .cliente-avatar-main {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .deuda-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .montos-info {
+    text-align: left;
+    width: 100%;
+  }
+}

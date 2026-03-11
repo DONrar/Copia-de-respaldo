@@ -1,0 +1,227 @@
+<ion-header [translucent]="true">
+  <ion-toolbar style="--background: #132440; --color: white;">
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false" style="--color: white;"></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard" style="--color: white;"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-icon name="settings-outline"></ion-icon>
+      &nbsp;Configuración
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+
+    <!-- Información de la app -->
+    <ion-card class="info-card">
+      <ion-card-header class="card-header-custom">
+        <ion-card-title>
+          <div class="title-with-icon">
+            <div class="title-icon">
+              <ion-icon name="stats-chart-outline"></ion-icon>
+            </div>
+            <span>Información de Datos</span>
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-icon clients">
+              <ion-icon name="people-outline"></ion-icon>
+            </div>
+            <div class="stat-content">
+              <span class="stat-number">{{ estadisticas.totalClientes }}</span>
+              <span class="stat-label">Clientes</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon debts">
+              <ion-icon name="cart-outline"></ion-icon>
+            </div>
+            <div class="stat-content">
+              <span class="stat-number">{{ estadisticas.totalDeudas }}</span>
+              <span class="stat-label">Deudas</span>
+            </div>
+          </div>
+        </div>
+        <div class="storage-info">
+          <ion-icon name="save-outline"></ion-icon>
+          <span>Todos los datos se guardan localmente en tu dispositivo</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Respaldo y Restauración -->
+    <ion-card class="backup-card">
+      <ion-card-header class="card-header-custom">
+        <ion-card-title>
+          <div class="title-with-icon">
+            <div class="title-icon">
+              <ion-icon name="shield-checkmark-outline"></ion-icon>
+            </div>
+            <span>Respaldo de Datos</span>
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="action-buttons">
+          <ion-button expand="block" (click)="exportarRespaldo()" class="btn-export">
+            <ion-icon name="download-outline" slot="start"></ion-icon>
+            Exportar Respaldo
+          </ion-button>
+
+          <ion-button expand="block" (click)="importarRespaldo()" fill="outline" class="btn-import">
+            <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+            Importar Respaldo
+          </ion-button>
+        </div>
+
+        <div class="warning-note">
+          <div class="warning-icon">
+            <ion-icon name="information-circle-outline"></ion-icon>
+          </div>
+          <span>Te recomendamos hacer respaldos regularmente</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Agregar después del card de "Información de Datos" -->
+
+<!-- Uso de Almacenamiento -->
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>
+      <ion-icon name="server-outline"></ion-icon>
+      Uso de Almacenamiento
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <div class="storage-info">
+      <div class="storage-bar">
+        <div
+          class="storage-fill"
+          [style.width.%]="almacenamiento.porcentajeUsado"
+          [class.warning]="almacenamiento.porcentajeUsado > 70"
+          [class.danger]="almacenamiento.porcentajeUsado > 90">
+        </div>
+      </div>
+      <div class="storage-details">
+        <div class="storage-row">
+          <span>Espacio usado:</span>
+          <strong>{{ almacenamiento.totalSizeMB }} MB</strong>
+        </div>
+        <div class="storage-row">
+          <span>Espacio disponible:</span>
+          <strong>{{ almacenamiento.espacioDisponibleMB }} MB</strong>
+        </div>
+        <div class="storage-row">
+          <span>Límite total:</span>
+          <strong>{{ almacenamiento.limiteMB }} MB</strong>
+        </div>
+        <div class="storage-row">
+          <span>Porcentaje usado:</span>
+          <strong>{{ almacenamiento.porcentajeUsado }}%</strong>
+        </div>
+      </div>
+    </div>
+
+    <ion-note *ngIf="almacenamiento.porcentajeUsado > 70" class="warning-note">
+      <ion-icon name="warning-outline"></ion-icon>
+      Estás usando más del 70% del almacenamiento. Considera hacer un respaldo y limpiar datos antiguos.
+    </ion-note>
+
+    <ion-note *ngIf="almacenamiento.porcentajeUsado > 90" class="danger-note">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      ¡Alerta! Estás cerca del límite de almacenamiento. Haz un respaldo urgente.
+    </ion-note>
+  </ion-card-content>
+</ion-card>
+
+    <!-- Ayuda y Soporte -->
+    <ion-card class="help-card">
+      <ion-card-header class="card-header-custom">
+        <ion-card-title>
+          <div class="title-with-icon">
+            <div class="title-icon">
+              <ion-icon name="help-circle-outline"></ion-icon>
+            </div>
+            <span>Ayuda y Soporte</span>
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="help-actions">
+          <ion-button expand="block" fill="clear" (click)="mostrarAyuda()" class="btn-help">
+            <div class="btn-content">
+              <div class="btn-icon">
+                <ion-icon name="document-text-outline"></ion-icon>
+              </div>
+              <div class="btn-text">
+                <span class="btn-title">¿Cómo usar la app?</span>
+                <span class="btn-subtitle">Guía rápida de uso</span>
+              </div>
+            </div>
+          </ion-button>
+
+          <ion-button expand="block" fill="clear" (click)="mostrarAcercaDe()" class="btn-help">
+            <div class="btn-content">
+              <div class="btn-icon">
+                <ion-icon name="information-circle-outline"></ion-icon>
+              </div>
+              <div class="btn-text">
+                <span class="btn-title">Acerca de</span>
+                <span class="btn-subtitle">Versión e información de la app</span>
+              </div>
+            </div>
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Zona de Peligro -->
+    <ion-card class="danger-card">
+      <ion-card-header class="card-header-custom">
+        <ion-card-title>
+          <div class="title-with-icon">
+            <div class="title-icon danger">
+              <ion-icon name="warning-outline"></ion-icon>
+            </div>
+            <span>Zona de Peligro</span>
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="danger-content">
+          <ion-button
+            expand="block"
+            (click)="limpiarTodosDatos()"
+            class="btn-danger">
+            <ion-icon name="trash-outline" slot="start"></ion-icon>
+            Eliminar Todos los Datos
+          </ion-button>
+          <div class="danger-warning">
+            <div class="warning-icon danger">
+              <ion-icon name="warning"></ion-icon>
+            </div>
+            <span>Esta acción es permanente y no se puede deshacer</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Footer info -->
+    <div class="footer-info">
+      <div class="app-version">
+        <ion-icon name="cube-outline"></ion-icon>
+        <span>Fiados App v1.0.0</span>
+      </div>
+      <p>© 2025 - Todos los derechos reservados</p>
+    </div>
+
+  </div>
+</ion-content>

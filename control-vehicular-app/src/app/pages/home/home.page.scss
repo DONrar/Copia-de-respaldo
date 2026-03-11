@@ -1,0 +1,644 @@
+/* scan.component.scss - Estilos Premium */
+.scan-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  text-align: center;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 24px;
+  margin: 1rem;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #3B9797, #16476A);
+  }
+}
+
+.scan-icon-container {
+  background: linear-gradient(135deg, #16476A 0%, #3B9797 100%);
+  border-radius: 50%;
+  padding: 2.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 24px rgba(59, 151, 151, 0.3);
+  position: relative;
+  transition: all 0.3s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 2px solid rgba(59, 151, 151, 0.2);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 32px rgba(59, 151, 151, 0.4);
+  }
+}
+
+.scan-icon {
+  font-size: 4rem;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.scan-description {
+  color: #132440;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+.scan-button {
+  margin-top: 1rem;
+
+  ion-button {
+    --background: linear-gradient(135deg, #16476A 0%, #3B9797 100%);
+    --background-hover: linear-gradient(135deg, #132440 0%, #16476A 100%);
+    --border-radius: 16px;
+    --padding-start: 2rem;
+    --padding-end: 2rem;
+    --padding-top: 1rem;
+    --padding-bottom: 1rem;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(59, 151, 151, 0.3);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(59, 151, 151, 0.4);
+    }
+  }
+}
+
+.scanning-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  color: white;
+  background: linear-gradient(135deg, #132440 0%, #16476A 100%);
+  border-radius: 24px;
+  margin: 1rem;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+
+  .scanning-animation {
+    width: 200px;
+    height: 200px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    position: relative;
+    margin-bottom: 2rem;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border: 4px solid transparent;
+      border-top: 4px solid #3B9797;
+      border-radius: 50%;
+      animation: spin 1.5s linear infinite;
+    }
+  }
+
+  .scanning-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .scanning-subtext {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+}
+
+.persona-info-container {
+  padding: 1rem;
+}
+
+.persona-card {
+  margin-bottom: 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  ion-card-header {
+    background: linear-gradient(135deg, #16476A 0%, #3B9797 100%);
+    color: white;
+    padding: 1.5rem;
+  }
+
+  ion-card-content {
+    padding: 1.5rem;
+  }
+}
+
+.persona-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+
+  .persona-avatar {
+    flex-shrink: 0;
+  }
+
+  .persona-details {
+    flex: 1;
+
+    h2 {
+      margin: 0 0 0.5rem 0;
+      color: white;
+      font-size: 1.4rem;
+    }
+
+    p {
+      margin: 0;
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+  }
+}
+
+.no-photo-avatar {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+
+  ion-icon {
+    font-size: 2.5rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.estado-pago-container {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.estado-pago-badge {
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+  &.pagado {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+  }
+
+  &.pendiente {
+    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+    color: white;
+  }
+
+  &.vencido {
+    background: linear-gradient(135deg, #BF092F 0%, #dc3545 100%);
+    color: white;
+  }
+}
+
+.mensaje-principal {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 1.5rem 0;
+  text-align: center;
+  color: #132440;
+  padding: 1rem;
+  background: rgba(59, 151, 151, 0.1);
+  border-radius: 12px;
+  border-left: 4px solid #3B9797;
+}
+
+.vehiculos-card {
+  margin-bottom: 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+  ion-card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 1.5rem;
+
+    ion-card-title {
+      color: #132440;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+  }
+}
+
+.vehiculos-list {
+  background: transparent;
+  padding: 0;
+}
+
+.vehiculo-item {
+  --padding-start: 1.5rem;
+  --padding-end: 1.5rem;
+  --padding-top: 1rem;
+  --padding-bottom: 1rem;
+  margin: 0.5rem 1rem;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.vehiculo-selected {
+  --background: rgba(59, 151, 151, 0.15);
+  border-left: 6px solid #3B9797;
+  box-shadow: 0 4px 16px rgba(59, 151, 151, 0.2);
+}
+
+.vehiculo-placa {
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: #132440;
+  margin-bottom: 0.5rem;
+}
+
+.vehiculo-info {
+  margin: 0.25rem 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.vehiculo-color {
+  margin: 0.25rem 0;
+  color: #666;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: currentColor;
+    display: inline-block;
+  }
+}
+
+.vehiculo-rol {
+  margin-top: 0.75rem;
+  padding: 6px 12px;
+  background: rgba(59, 151, 151, 0.1);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #16476A;
+  display: inline-block;
+}
+
+.movimiento-selector {
+  margin: 2rem 0;
+
+  ion-segment {
+    --background: #f8f9fa;
+    border-radius: 16px;
+    padding: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    ion-segment-button {
+      --color: #666;
+      --color-checked: white;
+      --indicator-color: linear-gradient(135deg, #16476A 0%, #3B9797 100%);
+      --border-radius: 12px;
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+      font-weight: 600;
+      min-height: 48px;
+    }
+  }
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0;
+
+  ion-button {
+    --border-radius: 16px;
+    --padding-top: 1rem;
+    --padding-bottom: 1rem;
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0;
+
+    &.btn-primary {
+      --background: linear-gradient(135deg, #16476A 0%, #3B9797 100%);
+      --background-hover: linear-gradient(135deg, #132440 0%, #16476A 100%);
+    }
+
+    &.btn-success {
+      --background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      --background-hover: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+    }
+
+    &.btn-warning {
+      --background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+      --background-hover: linear-gradient(135deg, #e0a800 0%, #e0a800 100%);
+    }
+  }
+}
+
+.ultimo-movimiento-card {
+  margin-top: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+  ion-card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 1.5rem;
+
+    ion-card-title {
+      color: #132440;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+  }
+}
+
+.ultimo-movimiento-info {
+  text-align: center;
+  padding: 1.5rem;
+
+  .movimiento-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #3B9797;
+  }
+
+  .movimiento-tipo {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #132440;
+    margin-bottom: 0.5rem;
+  }
+
+  .movimiento-descripcion {
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+}
+
+.fecha-movimiento {
+  color: #999;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.user-info {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+
+  .user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #16476A 0%, #3B9797 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(59, 151, 151, 0.3);
+  }
+}
+
+/* Estilos para cuando el escáner está activo */
+.scanner-active {
+  --background: transparent;
+  --ion-background-color: transparent;
+
+  ion-content {
+    --background: transparent;
+  }
+
+  .scanner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(19, 36, 64, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+
+    .scanner-frame {
+      width: 280px;
+      height: 280px;
+      border: 4px solid #3B9797;
+      border-radius: 24px;
+      position: relative;
+      box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.3);
+
+      &::before, &::after {
+        content: '';
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        border: 4px solid #3B9797;
+      }
+
+      &::before {
+        top: -4px;
+        left: -4px;
+        border-right: none;
+        border-bottom: none;
+        border-radius: 20px 0 0 0;
+      }
+
+      &::after {
+        bottom: -4px;
+        right: -4px;
+        border-left: none;
+        border-top: none;
+        border-radius: 0 0 20px 0;
+      }
+    }
+
+    .scanner-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: #3B9797;
+      animation: scan 2s ease-in-out infinite;
+      box-shadow: 0 0 8px rgba(59, 151, 151, 0.6);
+    }
+
+    .scanner-text {
+      color: white;
+      margin-top: 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-align: center;
+    }
+  }
+}
+
+/* Animaciones */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.7;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scan {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(276px);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .scan-container,
+  .scanning-indicator {
+    height: 60vh;
+    margin: 0.5rem;
+    padding: 1.5rem;
+  }
+
+  .scan-icon-container {
+    padding: 2rem;
+
+    .scan-icon {
+      font-size: 3.5rem;
+    }
+  }
+
+  .persona-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .action-buttons {
+    gap: 0.75rem;
+
+    ion-button {
+      --padding-top: 0.875rem;
+      --padding-bottom: 0.875rem;
+    }
+  }
+
+  .scanner-active .scanner-overlay .scanner-frame {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .scan-container,
+  .scanning-indicator {
+    height: 50vh;
+    padding: 1rem;
+  }
+
+  .scan-icon-container {
+    padding: 1.5rem;
+
+    .scan-icon {
+      font-size: 3rem;
+    }
+  }
+
+  .scan-description {
+    font-size: 1rem;
+  }
+
+  .scanner-active .scanner-overlay .scanner-frame {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  .scan-icon-container,
+  .vehiculo-item,
+  ion-button {
+    transition: none;
+  }
+
+  .scan-icon-container::after,
+  .scanning-animation::before,
+  .scanner-line {
+    animation: none;
+  }
+}
+
+/* Estados de foco para accesibilidad */
+ion-button:focus,
+ion-segment-button:focus,
+.vehiculo-item:focus {
+  outline: 2px solid #3B9797;
+  outline-offset: 2px;
+}

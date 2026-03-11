@@ -1,0 +1,170 @@
+<ion-header [translucent]="true">
+  <ion-toolbar style="--background: #132440; --color: white;">
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false" style="--color: white;"></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="volver()" style="--color: white;"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalle de Deuda</ion-title>
+    <ion-buttons slot="end">
+      <!-- Botón de opciones -->
+      <ion-button (click)="mostrarOpciones()" style="--color: white;">
+        <ion-icon name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container" *ngIf="deuda">
+
+    <!-- Información del cliente y fecha -->
+    <ion-card class="info-card">
+      <ion-card-content>
+        <div class="header-main">
+          <div class="cliente-info">
+            <div class="cliente-avatar">
+              {{ deuda.clienteNombre.charAt(0).toUpperCase() }}
+            </div>
+            <div class="cliente-details">
+              <h2 class="cliente-nombre">{{ deuda.clienteNombre }}</h2>
+              <div class="fecha-info">
+                <div class="fecha-icon">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                </div>
+                <span>{{ formatearFechaCorta(deuda.fecha) }}</span>
+              </div>
+            </div>
+          </div>
+          <ion-badge class="status-badge" [class.pagada]="deuda.estado === 'pagada'" [class.pendiente]="deuda.estado === 'pendiente'">
+            {{ deuda.estado === 'pagada' ? 'Pagada' : 'Pendiente' }}
+          </ion-badge>
+        </div>
+
+        <div class="notas-container" *ngIf="deuda.notas">
+          <div class="notas-icon">
+            <ion-icon name="document-text-outline"></ion-icon>
+          </div>
+          <span class="notas-text">{{ deuda.notas }}</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Productos -->
+    <ion-card class="products-card">
+      <ion-card-header class="card-header-custom">
+        <ion-card-title>
+          <div class="title-with-icon">
+            <div class="title-icon">
+              <ion-icon name="cart-outline"></ion-icon>
+            </div>
+            <span>Productos ({{ deuda.productos.length }})</span>
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="products-list">
+          <div *ngFor="let producto of deuda.productos" class="product-item">
+            <div class="product-info">
+              <h3 class="product-name">{{ producto.nombre }}</h3>
+              <p class="product-details">{{ producto.cantidad }} x {{ formatearMoneda(producto.valorUnitario) }}</p>
+            </div>
+            <div class="product-total">
+              {{ formatearMoneda(producto.subtotal) }}
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Resumen financiero -->
+    <ion-card class="summary-card">
+      <ion-card-content>
+        <h3 class="summary-title">Resumen Financiero</h3>
+
+        <div class="summary-row">
+          <span class="summary-label">Total de la deuda:</span>
+          <span class="summary-value total-deuda">{{ formatearMoneda(deuda.total) }}</span>
+        </div>
+
+        <div class="summary-row" *ngIf="abonos.length > 0">
+          <span class="summary-label">Total abonado:</span>
+          <span class="summary-value abonado">- {{ formatearMoneda(calcularTotalAbonos()) }}</span>
+        </div>
+
+        <div class="summary-divider"></div>
+
+        <div class="summary-row total-pendiente">
+          <span class="summary-label">Saldo pendiente:</span>
+          <span class="summary-value pendiente" [class.cero]="deuda.saldoPendiente === 0">
+            {{ formatearMoneda(deuda.saldoPendiente) }}
+          </span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Historial de abonos -->
+    <ion-card *ngIf="abonos.length > 0" class="payments-card">
+      <ion-card-header class="card-header-custom">
+        <ion-card-title>
+          <div class="title-with-icon">
+            <div class="title-icon">
+              <ion-icon name="wallet-outline"></ion-icon>
+            </div>
+            <span>Historial de Pagos ({{ abonos.length }})</span>
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="payments-list">
+          <div *ngFor="let abono of abonos" class="payment-item">
+            <div class="payment-icon">
+              <ion-icon name="cash-outline"></ion-icon>
+            </div>
+            <div class="payment-info">
+              <div class="payment-amount">{{ formatearMoneda(abono.monto) }}</div>
+              <div class="payment-date">{{ formatearFecha(abono.fecha) }}</div>
+              <div *ngIf="abono.notas" class="payment-notes">{{ abono.notas }}</div>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Mensaje si no hay abonos -->
+    <ion-card *ngIf="abonos.length === 0 && deuda.estado === 'pendiente'" class="empty-payments">
+      <ion-card-content>
+        <div class="empty-content">
+          <div class="empty-icon">
+            <ion-icon name="wallet-outline"></ion-icon>
+          </div>
+          <h3>No hay pagos registrados</h3>
+          <p>Registra el primer pago para esta deuda</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Botón para registrar abono -->
+    <div class="action-section" *ngIf="deuda.estado === 'pendiente'">
+      <ion-button
+        expand="block"
+        size="large"
+        (click)="abrirDialogoAbono()"
+        class="btn-payment">
+        <ion-icon name="cash-outline" slot="start"></ion-icon>
+        Registrar Abono
+      </ion-button>
+    </div>
+
+    <!-- Mensaje si está pagada -->
+    <div class="paid-status" *ngIf="deuda.estado === 'pagada'">
+      <div class="paid-icon">
+        <ion-icon name="checkmark-circle"></ion-icon>
+      </div>
+      <h3>Deuda Pagada Completamente</h3>
+      <p>Esta deuda ha sido saldada en su totalidad</p>
+    </div>
+
+  </div>
+</ion-content>

@@ -1,0 +1,100 @@
+<body>
+  <h2>Inventario</h2>
+
+  <!-- Crear item -->
+  <section class="card">
+    <h3>Nuevo producto</h3>
+    <form [formGroup]="createForm" (ngSubmit)="create()">
+      <div class="row">
+        <label for="name">Nombre</label>
+        <input id="name" formControlName="name" placeholder="Shampoo 500ml" />
+      </div>
+      <div class="row">
+        <label for="quantity">Cantidad</label>
+        <input id="quantity" type="number" formControlName="quantity" min="0" />
+      </div>
+      <div class="row">
+        <label for="unit">Unidad</label>
+        <input id="unit" formControlName="unit" placeholder="botella / unidad / caja" />
+      </div>
+      <div class="row">
+        <button class="btn" [disabled]="createForm.invalid || loading()">Crear</button>
+        <span class="ok" *ngIf="okCreate()">Creado</span>
+        <span class="error" *ngIf="error()">{{ error() }}</span>
+      </div>
+    </form>
+  </section>
+
+  <!-- Listado -->
+  <section class="card">
+    <h3>Productos</h3>
+    <table class="table" *ngIf="items().length; else empty">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Cantidad</th>
+          <th>Unidad</th>
+          <th style="width:160px">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let it of items()">
+          <td>{{ it.name }}</td>
+
+          <td *ngIf="editingId() !== it.id">{{ it.quantity }}</td>
+          <td *ngIf="editingId() === it.id">
+            <input type="number" [ngModel]="editQty" (ngModelChange)="editQty = $event" min="0" />
+          </td>
+
+          <td *ngIf="editingId() !== it.id">{{ it.unit }}</td>
+          <td *ngIf="editingId() === it.id">
+            <input [ngModel]="editUnit" (ngModelChange)="editUnit = $event" />
+          </td>
+
+          <td>
+            <ng-container *ngIf="editingId() !== it.id; else editBtns">
+              <button class="btn" (click)="startEdit(it)">Editar</button>
+            </ng-container>
+            <ng-template #editBtns>
+              <button class="btn btn-ok" (click)="saveEdit(it)" [disabled]="loading()">Guardar</button>
+              <button class="btn btn-ghost" (click)="cancelEdit()">Cancelar</button>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #empty>
+      <p class="muted">No hay productos.</p>
+    </ng-template>
+  </section>
+
+  <!-- Consumir -->
+  <section class="card">
+    <h3>Consumir inventario</h3>
+    <form (ngSubmit)="consume()">
+      <div class="row">
+        <label for="consName">Producto</label>
+        <select id="consName" [(ngModel)]="consName" name="consName">
+          <option [ngValue]="''" disabled>Selecciona…</option>
+          <option *ngFor="let it of items()" [value]="it.name">{{ it.name }}</option>
+        </select>
+        <label for="consQty">Cantidad</label>
+        <input id="consQty" type="number" [(ngModel)]="consQty" name="consQty" min="1" />
+        <button class="btn" type="button" (click)="addLine()">Añadir</button>
+      </div>
+
+      <ul class="cons-list" *ngIf="consumptions().length">
+        <li *ngFor="let c of consumptions(); let i = index">
+          {{ c.name }} — {{ c.quantity }}
+          <button class="link" type="button" (click)="removeLine(i)">Quitar</button>
+        </li>
+      </ul>
+
+      <div class="row">
+        <button class="btn btn-ok" [disabled]="!consumptions().length || loading()">Consumir</button>
+        <span class="ok" *ngIf="okConsume()">Hecho</span>
+        <span class="error" *ngIf="error()">{{ error() }}</span>
+      </div>
+    </form>
+  </section>
+</body>

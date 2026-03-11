@@ -1,0 +1,174 @@
+<body>
+  <h2 class="section-title">Usuarios</h2>
+
+  <!-- Crear -->
+  <section class="card">
+    <h3>👥 Crear usuario</h3>
+    <form [formGroup]="createForm" (ngSubmit)="create()">
+      <div class="row">
+        <label>Email</label>
+        <input type="email" formControlName="email" placeholder="usuario@ejemplo.com" />
+      </div>
+      <div class="row">
+        <label>Nombre</label>
+        <input formControlName="fullName" placeholder="Nombre completo" />
+      </div>
+      <div class="row">
+        <label>Rol</label>
+        <select formControlName="role">
+          <option value="GUEST">HUÉSPED</option>
+          <option value="STAFF">PERSONAL</option>
+          <option value="ADMIN">ADMINISTRADOR</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>Contraseña (opcional)</label>
+        <input type="text" formControlName="password" placeholder="Si vacías, genera temporal" />
+      </div>
+      <button class="btn" [disabled]="createForm.invalid || loading()">
+        ➕ Crear usuario
+      </button>
+      <span class="ok" *ngIf="okCreate()">✅ Usuario creado exitosamente</span>
+      <span class="error" *ngIf="error()">{{ error() }}</span>
+    </form>
+  </section>
+
+  <!-- Filtros -->
+  <section class="card">
+    <h3>📋 Listado de usuarios</h3>
+    <div class="filters">
+      <div class="row">
+        <label>Buscar</label>
+        <input [(ngModel)]="search" placeholder="Email o nombre" />
+      </div>
+      <div class="row">
+        <label>Filtrar por rol</label>
+        <select [(ngModel)]="roleFilter">
+          <option value="">Todos los roles</option>
+          <option value="ADMIN">Administrador</option>
+          <option value="STAFF">Personal</option>
+          <option value="GUEST">Huésped</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>Filtrar por estado</label>
+        <select [(ngModel)]="enabledFilter">
+          <option value="">Todos los estados</option>
+          <option value="true">Habilitados</option>
+          <option value="false">Deshabilitados</option>
+        </select>
+      </div>
+      <button class="btn" (click)="load()">
+        🔍 Buscar
+      </button>
+    </div>
+
+    <table class="table" *ngIf="rows().length; else empty">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Nombre</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th style="width:320px">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of rows()">
+          <td><strong>{{ u.email }}</strong></td>
+
+          <td *ngIf="editId() !== u.id">{{ u.fullName }}</td>
+          <td *ngIf="editId() === u.id">
+            <input [(ngModel)]="editName" class="edit-input" />
+          </td>
+
+          <td *ngIf="editId() !== u.id">
+            <span class="badge" [ngClass]="{
+              'badge-off': u.role === 'GUEST',
+              'status-available': u.role === 'STAFF',
+              'status-occupied': u.role === 'ADMIN'
+            }">
+              {{ u.role }}
+            </span>
+          </td>
+          <td *ngIf="editId() === u.id">
+            <select [(ngModel)]="editRole" class="edit-select">
+              <option value="ADMIN">ADMIN</option>
+              <option value="STAFF">STAFF</option>
+              <option value="GUEST">GUEST</option>
+            </select>
+          </td>
+
+          <td>
+            <span class="badge" [class.badge-off]="!u.enabled">
+              {{ u.enabled ? 'HABILITADO' : 'DESHABILITADO' }}
+            </span>
+          </td>
+
+          <td>
+            <ng-container *ngIf="editId() !== u.id; else editBtns">
+              <button class="btn" (click)="startEdit(u)" title="Editar usuario">
+                ✏️ Editar
+              </button>
+              <button class="btn" (click)="toggleEnable(u)" [disabled]="loading()"
+                [title]="u.enabled ? 'Deshabilitar usuario' : 'Habilitar usuario'">
+                {{ u.enabled ? '🚫 Deshab.' : '✅ Hab.' }}
+              </button>
+              <button class="btn" (click)="doReset(u)" [disabled]="loading()" title="Restablecer contraseña">
+                🔄 Reset
+              </button>
+              <button class="btn" (click)="openSetPass(u)" title="Establecer contraseña manual">
+                🔑 Set Pass
+              </button>
+              <button class="btn btn-danger" (click)="remove(u)" [disabled]="loading()" title="Eliminar usuario">
+                🗑️ Eliminar
+              </button>
+            </ng-container>
+            <ng-template #editBtns>
+              <button class="btn btn-ok" (click)="saveEdit(u)" [disabled]="loading()">
+                💾 Guardar
+              </button>
+              <button class="btn btn-ghost" (click)="cancelEdit()">
+                ❌ Cancelar
+              </button>
+            </ng-template>
+          </td>
+        </tr>
+
+        <!-- línea para mostrar resultado de reset -->
+        <tr *ngIf="resetResultId()">
+          <td colspan="5" class="subrow">
+            <b>🔒 Contraseña temporal:</b>
+            <code style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 4px; margin: 0 1rem;">
+              {{ resetTempPassword }}
+            </code>
+            <button class="link" (click)="resetResultId.set(null)">Cerrar</button>
+          </td>
+        </tr>
+
+        <!-- set password inline -->
+        <tr *ngIf="setPassId()">
+          <td colspan="5" class="subrow">
+            <b>🔒 Establecer nueva contraseña</b>
+            <input [(ngModel)]="setPassValue" placeholder="Nueva contraseña" type="password" />
+            <button class="btn btn-ok" (click)="confirmSetPass()">💾 Guardar</button>
+            <button class="btn btn-ghost" (click)="cancelSetPass()">❌ Cancelar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #empty>
+      <p class="muted">No hay usuarios que coincidan con los filtros.</p>
+    </ng-template>
+
+    <!-- paginación -->
+    <div class="pager" *ngIf="totalPages()>1">
+      <button class="btn" (click)="prev()" [disabled]="page()<=0 || loading()">◀ Anterior</button>
+      <span>Página {{ page()+1 }} / {{ totalPages() }}</span>
+      <button class="btn" (click)="next()" [disabled]="page()>=totalPages()-1 || loading()">Siguiente ▶</button>
+    </div>
+
+    <p class="error" *ngIf="error()">{{ error() }}</p>
+  </section>
+</body>

@@ -1,0 +1,35 @@
+<body>
+  <!-- Partículas de fondo (efecto futurista) -->
+  <div class="particle particle-1"></div>
+  <div class="particle particle-2"></div>
+  <div class="particle particle-3"></div>
+
+  <main class="container">
+    <h2 class="dashboard-title">Dashboard</h2>
+
+    <div class="user-card" *ngIf="auth.currentUser() as me">
+      <h3>Hola, {{ me.fullName }}</h3>
+      <ul class="user-info-list">
+        <li>
+          <span class="info-label">Email:</span>
+          <span class="info-value">{{ me.email }}</span>
+        </li>
+        <li>
+          <span class="info-label">Rol:</span>
+          <span class="info-value">{{ me.role }}</span>
+        </li>
+        <li>
+          <span class="info-label">Estado:</span>
+          <span [class]="me.enabled ? 'status-enabled' : 'status-disabled'">
+            {{ me.enabled ? 'Habilitado' : 'Deshabilitado' }}
+          </span>
+        </li>
+      </ul>
+      <div class="api-info">
+        Este dato viene de <code>/auth/me</code> (token en el header).
+      </div>
+    </div>
+
+    <p class="loading-state" *ngIf="!auth.currentUser()">Cargando información de usuario...</p>
+  </main>
+</body>

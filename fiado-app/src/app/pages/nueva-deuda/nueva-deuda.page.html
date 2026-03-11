@@ -1,0 +1,182 @@
+<ion-header [translucent]="true">
+  <ion-toolbar style="--background: #132440; --color: white;">
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false" style="--color: white;"></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="'/detalle-cliente/' + clienteId" style="--color: white;"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Nueva Deuda</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container" *ngIf="cliente">
+
+    <!-- Header del cliente -->
+    <div class="cliente-header">
+      <div class="cliente-avatar">
+        {{ cliente.nombre.charAt(0).toUpperCase() }}
+      </div>
+      <div class="cliente-info">
+        <h1>Nueva Deuda</h1>
+        <p>Registrando deuda para {{ cliente.nombre }}</p>
+      </div>
+    </div>
+
+    <!-- Formulario para agregar productos -->
+    <ion-card class="form-card">
+      <ion-card-header class="card-header-custom">
+        <ion-card-title>
+          <div class="title-with-icon">
+            <div class="title-icon">
+              <ion-icon name="add-circle-outline"></ion-icon>
+            </div>
+            <span>Agregar Producto</span>
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="form-group">
+          <div class="input-container">
+            <label class="input-label">Producto *</label>
+            <ion-input
+              [(ngModel)]="productoNombre"
+              type="text"
+              placeholder="Ej: Arroz Diana x 500g"
+              class="custom-input">
+            </ion-input>
+          </div>
+
+          <div class="row-inputs">
+            <div class="input-container">
+              <label class="input-label">Cantidad *</label>
+              <ion-input
+                [(ngModel)]="productoCantidad"
+                type="number"
+                min="1"
+                placeholder="1"
+                class="custom-input">
+              </ion-input>
+            </div>
+
+            <div class="input-container">
+              <label class="input-label">Valor Unitario *</label>
+              <ion-input
+                [(ngModel)]="productoValorUnitario"
+                type="number"
+                min="0"
+                placeholder="0"
+                class="custom-input">
+              </ion-input>
+            </div>
+          </div>
+
+          <div class="subtotal-preview" *ngIf="productoCantidad > 0 && productoValorUnitario > 0">
+            <div class="subtotal-content">
+              <span class="subtotal-label">Subtotal:</span>
+              <span class="subtotal-value">{{ formatearMoneda(productoCantidad * productoValorUnitario) }}</span>
+            </div>
+          </div>
+
+          <ion-button
+            expand="block"
+            (click)="agregarProducto()"
+            [disabled]="!productoNombre || productoCantidad <= 0 || productoValorUnitario <= 0"
+            class="btn-add-product">
+            <ion-icon name="add-circle" slot="start"></ion-icon>
+            Agregar Producto
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Lista de productos agregados -->
+    <ion-card *ngIf="productos.length > 0" class="products-card">
+      <ion-card-header class="card-header-custom">
+        <ion-card-title>
+          <div class="title-with-icon">
+            <div class="title-icon">
+              <ion-icon name="cart-outline"></ion-icon>
+            </div>
+            <span>Productos ({{ productos.length }})</span>
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="products-list">
+          <div *ngFor="let producto of productos; let i = index" class="product-item">
+            <div class="product-info">
+              <div class="product-header">
+                <h3 class="product-name">{{ producto.nombre }}</h3>
+                <button class="btn-delete" (click)="eliminarProducto(producto)">
+                  <ion-icon name="close-circle"></ion-icon>
+                </button>
+              </div>
+              <div class="product-details">
+                <span class="product-quantity">{{ producto.cantidad }} x {{ formatearMoneda(producto.valorUnitario) }}</span>
+                <span class="product-subtotal">{{ formatearMoneda(producto.subtotal) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total -->
+        <div class="total-section">
+          <div class="total-divider"></div>
+          <div class="total-row">
+            <span class="total-label">TOTAL DEUDA:</span>
+            <span class="total-value">{{ formatearMoneda(calcularTotal()) }}</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Notas opcionales -->
+    <ion-card *ngIf="productos.length > 0" class="notes-card">
+      <ion-card-header class="card-header-custom">
+        <ion-card-title>
+          <div class="title-with-icon">
+            <div class="title-icon">
+              <ion-icon name="document-text-outline"></ion-icon>
+            </div>
+            <span>Notas (Opcional)</span>
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="input-container">
+          <label class="input-label">Observaciones</label>
+          <ion-textarea
+            [(ngModel)]="notas"
+            rows="3"
+            placeholder="Ej: Pago el próximo viernes..."
+            class="custom-textarea">
+          </ion-textarea>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Botones de acción -->
+    <div class="action-buttons" *ngIf="productos.length > 0">
+      <ion-button expand="block" (click)="guardarDeuda()" class="btn-save" size="large">
+        <ion-icon name="save-outline" slot="start"></ion-icon>
+        Guardar Deuda
+      </ion-button>
+      <ion-button expand="block" (click)="cancelar()" fill="outline" class="btn-cancel">
+        <ion-icon name="close-outline" slot="start"></ion-icon>
+        Cancelar
+      </ion-button>
+    </div>
+
+    <!-- Estado vacío -->
+    <div *ngIf="productos.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <ion-icon name="cart-outline"></ion-icon>
+      </div>
+      <h2>Agrega el primer producto</h2>
+      <p>Comienza agregando productos a la deuda</p>
+    </div>
+
+  </div>
+</ion-content>

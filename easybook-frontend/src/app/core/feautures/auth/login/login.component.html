@@ -1,0 +1,21 @@
+<section class="login-card">
+  <h1>Ingresar</h1>
+
+  <form (ngSubmit)="submit()" #f="ngForm">
+    <label>Email</label>
+    <input type="email" name="email" [(ngModel)]="email" required />
+
+    <label>Contraseña</label>
+    <input type="password" name="password" [(ngModel)]="password" required />
+
+    <button class="btn" [disabled]="loading() || f.invalid">
+      {{ loading() ? 'Ingresando...' : 'Entrar' }}
+    </button>
+    <p class="error" *ngIf="error()">{{ error() }}</p>
+  </form>
+
+  <p class="hint">
+    Admin de prueba: admin&#64;easybook.com / Admin123!
+  </p>
+
+</section>

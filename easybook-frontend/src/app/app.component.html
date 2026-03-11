@@ -1,0 +1,51 @@
+<header class="app-header">
+  <div class="brand">
+    <a routerLink="/">EasyBook</a>
+    <img src="logo.png" alt="EasyBook Logo">
+  </div>
+
+  <!-- Botón de menú hamburguesa para móviles -->
+  <button class="mobile-menu-btn" (click)="toggleMobileMenu()" *ngIf="auth.isLoggedIn()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav class="main-nav" *ngIf="auth.isLoggedIn()" [class.mobile-open]="mobileMenuOpen">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+      <i class="icon-dashboard"></i>Dashboard
+    </a>
+    <a routerLink="/rooms" routerLinkActive="active">
+      <i class="icon-rooms"></i>Rooms
+    </a>
+    <a routerLink="/inventory" routerLinkActive="active">
+      <i class="icon-inventory"></i>Inventory
+    </a>
+    <a routerLink="/incidents" routerLinkActive="active">
+      <i class="icon-incidents"></i>Incidents
+    </a>
+    <a routerLink="/stays" routerLinkActive="active">
+      <i class="icon-stays"></i>Stays
+    </a>
+    <a *ngIf="auth.currentUser()?.role==='ADMIN'" routerLink="/users" routerLinkActive="active">
+      <i class="icon-users"></i>Users
+    </a>
+    <a routerLink="/account/password" routerLinkActive="active">
+      <i class="icon-password"></i>Mi contraseña
+    </a>
+  </nav>
+
+  <span class="spacer"></span>
+
+  <ng-container *ngIf="auth.isLoggedIn(); else loginLink">
+    <span class="user">{{ auth.currentUser()?.fullName }} ({{ auth.currentUser()?.role }})</span>
+    <button class="btn" (click)="logout()">Salir</button>
+  </ng-container>
+  <ng-template #loginLink>
+    <a class="btn" routerLink="/login">Ingresar</a>
+  </ng-template>
+</header>
+
+<main class="container">
+  <router-outlet></router-outlet>
+</main>

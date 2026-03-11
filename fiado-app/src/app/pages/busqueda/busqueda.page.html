@@ -1,0 +1,297 @@
+<ion-header [translucent]="true">
+  <ion-toolbar style="--background: #132440; --color: white;">
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false" style="--color: white;"></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard" style="--color: white;"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Búsqueda y Filtros</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar style="--background: #16476A;">
+    <ion-searchbar
+      [(ngModel)]="textoBusqueda"
+      (ionInput)="buscar($event)"
+      placeholder="Buscar clientes, deudas..."
+      animated="true"
+      style="--background: white; --border-radius: 12px;"
+      class="custom-searchbar">
+    </ion-searchbar>
+  </ion-toolbar>
+
+  <ion-toolbar style="--background: #f8f9fa;">
+    <ion-segment [(ngModel)]="vistaActual" (ionChange)="cambiarVista($event)" class="custom-segment">
+      <ion-segment-button value="deudas" class="segment-btn">
+        <div class="segment-content">
+          <ion-icon name="cart-outline"></ion-icon>
+          <ion-label>Deudas</ion-label>
+        </div>
+      </ion-segment-button>
+      <ion-segment-button value="clientes" class="segment-btn">
+        <div class="segment-content">
+          <ion-icon name="people-outline"></ion-icon>
+          <ion-label>Clientes</ion-label>
+        </div>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+
+    <!-- Barra de acciones -->
+    <div class="actions-bar">
+      <div class="actions-left">
+        <ion-button size="small" fill="outline" (click)="mostrarFiltros = true" *ngIf="vistaActual === 'deudas'" class="btn-filter">
+          <ion-icon name="filter-outline" slot="start"></ion-icon>
+          Filtros
+          <ion-badge *ngIf="hayFiltrosActivos()" class="filter-dot">•</ion-badge>
+        </ion-button>
+      </div>
+
+      <div class="actions-right">
+        <ion-button size="small" fill="clear" (click)="exportarJSON()" class="btn-action">
+          <ion-icon name="code-outline"></ion-icon>
+        </ion-button>
+        <ion-button size="small" fill="clear" (click)="exportarPDFCompleto()" class="btn-action">
+          <ion-icon name="document-text-outline"></ion-icon>
+        </ion-button>
+        <ion-button size="small" fill="clear" (click)="exportarExcelCompleto()" class="btn-action">
+          <ion-icon name="grid-outline"></ion-icon>
+        </ion-button>
+        <ion-button size="small" fill="clear" (click)="compartirWhatsApp()" class="btn-action">
+          <ion-icon name="logo-whatsapp"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Vista de Deudas -->
+    <div *ngIf="vistaActual === 'deudas'" class="view-container">
+      <div class="results-header">
+        <span class="results-count">{{ deudasFiltradas.length }} resultado(s)</span>
+        <ion-button size="small" fill="clear" (click)="limpiarBusqueda()" *ngIf="textoBusqueda || hayFiltrosActivos()" class="btn-clear">
+          <ion-icon name="close-circle" slot="start"></ion-icon>
+          Limpiar
+        </ion-button>
+      </div>
+
+      <div class="cards-container" *ngIf="deudasFiltradas.length > 0">
+        <ion-card *ngFor="let deuda of deudasFiltradas" class="deuda-card" (click)="verDeuda(deuda)">
+          <ion-card-content>
+            <div class="deuda-header">
+              <div class="cliente-info">
+                <div class="cliente-avatar">
+                  {{ deuda.clienteNombre.charAt(0).toUpperCase() }}
+                </div>
+                <div class="cliente-details">
+                  <h3 class="cliente-nombre">{{ deuda.clienteNombre }}</h3>
+                  <p class="deuda-fecha">{{ formatearFecha(deuda.fecha) }}</p>
+                </div>
+              </div>
+              <ion-badge class="status-badge" [class.pagada]="deuda.estado === 'pagada'" [class.pendiente]="deuda.estado === 'pendiente'">
+                {{ deuda.estado === 'pagada' ? 'Pagada' : 'Pendiente' }}
+              </ion-badge>
+            </div>
+
+            <div class="deuda-content">
+              <div class="productos-info">
+                <div class="productos-icon">
+                  <ion-icon name="cart-outline"></ion-icon>
+                </div>
+                <span>{{ deuda.productos.length }} producto(s)</span>
+              </div>
+
+              <div class="montos-info">
+                <div class="monto-total">
+                  <span class="monto-label">Total:</span>
+                  <span class="monto-value">{{ formatearMoneda(deuda.total) }}</span>
+                </div>
+                <div class="monto-pendiente" *ngIf="deuda.estado === 'pendiente'">
+                  <span class="monto-label">Pendiente:</span>
+                  <span class="monto-value">{{ formatearMoneda(deuda.saldoPendiente) }}</span>
+                </div>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <div *ngIf="deudasFiltradas.length === 0" class="empty-state">
+        <div class="empty-icon">
+          <ion-icon name="search-outline"></ion-icon>
+        </div>
+        <h2>No se encontraron resultados</h2>
+        <p>Intenta ajustar los filtros de búsqueda</p>
+        <ion-button (click)="limpiarFiltros()" fill="outline" *ngIf="hayFiltrosActivos()" class="btn-clear-filters">
+          Limpiar Filtros
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Vista de Clientes -->
+    <div *ngIf="vistaActual === 'clientes'" class="view-container">
+      <div class="results-header">
+        <span class="results-count">{{ clientesFiltrados.length }} resultado(s)</span>
+        <ion-button size="small" fill="clear" (click)="limpiarBusqueda()" *ngIf="textoBusqueda" class="btn-clear">
+          <ion-icon name="close-circle" slot="start"></ion-icon>
+          Limpiar
+        </ion-button>
+      </div>
+
+      <div class="cards-container" *ngIf="clientesFiltrados.length > 0">
+        <ion-card *ngFor="let cliente of clientesFiltrados" class="cliente-card" (click)="verCliente(cliente)">
+          <ion-card-content>
+            <div class="cliente-header">
+              <div class="cliente-avatar-main">
+                {{ cliente.nombre.charAt(0).toUpperCase() }}
+              </div>
+              <div class="cliente-info-main">
+                <h3 class="cliente-nombre">{{ cliente.nombre }}</h3>
+                <p class="cliente-telefono" *ngIf="cliente.telefono">
+                  <ion-icon name="call-outline"></ion-icon>
+                  {{ cliente.telefono }}
+                </p>
+              </div>
+            </div>
+
+            <div class="cliente-saldo-container">
+              <span class="saldo-label">Saldo Total:</span>
+              <span class="saldo-amount" [class.deuda]="cliente.saldoTotal > 0" [class.saldo-cero]="cliente.saldoTotal === 0">
+                {{ formatearMoneda(cliente.saldoTotal) }}
+              </span>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <div *ngIf="clientesFiltrados.length === 0" class="empty-state">
+        <div class="empty-icon">
+          <ion-icon name="people-outline"></ion-icon>
+        </div>
+        <h2>No se encontraron clientes</h2>
+        <p>Intenta con otro término de búsqueda</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal de filtros -->
+  <ion-modal [isOpen]="mostrarFiltros" (didDismiss)="mostrarFiltros = false" class="filters-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar style="--background: #132440; --color: white;">
+          <ion-title>Filtros de Deudas</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="mostrarFiltros = false" style="--color: white;">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <div class="filtros-container">
+
+          <ion-card class="filter-card">
+            <ion-card-header class="filter-header">
+              <ion-card-title>
+                <div class="filter-title">
+                  <ion-icon name="time-outline"></ion-icon>
+                  Estado
+                </div>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-segment [(ngModel)]="filtroEstado" (ionChange)="aplicarFiltros()" class="filter-segment">
+                <ion-segment-button value="todas" class="filter-segment-btn">
+                  <ion-label>Todas</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="pendiente" class="filter-segment-btn">
+                  <ion-label>Pendientes</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="pagada" class="filter-segment-btn">
+                  <ion-label>Pagadas</ion-label>
+                </ion-segment-button>
+              </ion-segment>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card class="filter-card">
+            <ion-card-header class="filter-header">
+              <ion-card-title>
+                <div class="filter-title">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                  Rango de Fechas
+                </div>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="date-inputs">
+                <div class="date-input-group">
+                  <label class="date-label">Desde</label>
+                  <ion-input
+                    type="date"
+                    [(ngModel)]="filtroFechaDesde"
+                    (ionChange)="aplicarFiltros()"
+                    class="date-input">
+                  </ion-input>
+                </div>
+                <div class="date-input-group">
+                  <label class="date-label">Hasta</label>
+                  <ion-input
+                    type="date"
+                    [(ngModel)]="filtroFechaHasta"
+                    (ionChange)="aplicarFiltros()"
+                    class="date-input">
+                  </ion-input>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card class="filter-card">
+            <ion-card-header class="filter-header">
+              <ion-card-title>
+                <div class="filter-title">
+                  <ion-icon name="cash-outline"></ion-icon>
+                  Rango de Montos
+                </div>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="amount-inputs">
+                <div class="amount-input-group">
+                  <label class="amount-label">Monto Mínimo</label>
+                  <ion-input
+                    type="number"
+                    [(ngModel)]="filtroMontoMin"
+                    (ionChange)="aplicarFiltros()"
+                    placeholder="0"
+                    class="amount-input">
+                  </ion-input>
+                </div>
+                <div class="amount-input-group">
+                  <label class="amount-label">Monto Máximo</label>
+                  <ion-input
+                    type="number"
+                    [(ngModel)]="filtroMontoMax"
+                    (ionChange)="aplicarFiltros()"
+                    placeholder="Sin límite"
+                    class="amount-input">
+                  </ion-input>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+
+          <div class="filter-actions">
+            <ion-button expand="block" fill="outline" color="danger" (click)="limpiarFiltros()" class="btn-clear-all">
+              <ion-icon name="trash-outline" slot="start"></ion-icon>
+              Limpiar Todos los Filtros
+            </ion-button>
+          </div>
+
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

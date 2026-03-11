@@ -1,0 +1,340 @@
+/* header.component.scss */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 70px;
+  background: linear-gradient(135deg, #132440 0%, #16476A 100%);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid #3B9797;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #3B9797, #BF092F, #3B9797);
+    background-size: 200% 100%;
+    animation: gradientShift 3s ease infinite;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+
+    a {
+      color: white;
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-decoration: none;
+      background: linear-gradient(135deg, #fff 0%, #FD9E4A 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-1px);
+        text-shadow: 0 2px 10px rgba(59, 151, 151, 0.3);
+      }
+    }
+
+    img {
+      height: 32px;
+      width: auto;
+      border-radius: 6px;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: scale(1.1) rotate(5deg);
+      }
+    }
+  }
+
+  .main-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 2rem;
+
+    a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        transition: left 0.5s ease;
+      }
+
+      &:hover {
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-1px);
+
+        &::before {
+          left: 100%;
+        }
+      }
+
+      &.active {
+        color: white;
+        background: rgba(59, 151, 151, 0.2);
+        box-shadow: 0 2px 8px rgba(59, 151, 151, 0.3);
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 80%;
+          height: 2px;
+          background: #3B9797;
+          border-radius: 2px;
+        }
+      }
+    }
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
+  .user {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-right: 1rem;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    border-left: 2px solid #3B9797;
+  }
+
+  .btn {
+    background: linear-gradient(135deg, #3B9797 0%, #2a7a7a 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 2px 8px rgba(59, 151, 151, 0.3);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(59, 151, 151, 0.4);
+
+      &::before {
+        left: 100%;
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Container principal */
+.container {
+  min-height: calc(100vh - 70px);
+  background: #f8f9fa;
+  padding: 2rem;
+}
+
+/* Animación para el gradiente */
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .app-header {
+    padding: 0 1rem;
+
+    .main-nav {
+      margin-left: 1rem;
+      gap: 4px;
+
+      a {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
+    }
+
+    .user {
+      font-size: 0.85rem;
+      margin-right: 0.5rem;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    height: 60px;
+    padding: 0 1rem;
+
+    .brand {
+      a {
+        font-size: 1.5rem;
+      }
+
+      img {
+        height: 28px;
+      }
+    }
+
+    .main-nav {
+      display: none; /* Ocultamos la navegación en móviles por ahora */
+      /* En una implementación real, aquí iría el menú hamburguesa */
+    }
+
+    .user {
+      display: none; /* Ocultamos el usuario en móviles */
+    }
+
+    .btn {
+      padding: 8px 14px;
+      font-size: 0.8rem;
+    }
+  }
+
+  .container {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    padding: 0 0.5rem;
+
+    .brand {
+      gap: 8px;
+
+      a {
+        font-size: 1.3rem;
+      }
+
+      img {
+        height: 24px;
+      }
+    }
+
+    .btn {
+      padding: 6px 12px;
+      font-size: 0.75rem;
+    }
+  }
+
+  .container {
+    padding: 0.5rem;
+  }
+}
+
+/* Estados especiales */
+.app-header {
+  .main-nav a[routerLink="/users"] {
+    background: rgba(191, 9, 47, 0.1);
+    border: 1px solid rgba(191, 9, 47, 0.3);
+
+    &.active {
+      background: rgba(191, 9, 47, 0.2);
+      box-shadow: 0 2px 8px rgba(191, 9, 47, 0.3);
+
+      &::after {
+        background: #BF092F;
+      }
+    }
+  }
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  .app-header {
+    &::before {
+      animation: none;
+    }
+
+    .main-nav a::before,
+    .btn::before {
+      display: none;
+    }
+
+    .brand a:hover,
+    .main-nav a:hover,
+    .btn:hover {
+      transform: none;
+    }
+  }
+
+  @keyframes gradientShift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+  }
+}
+
+/* Modo oscuro del sistema */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: #1a1a1a;
+    color: #ffffff;
+  }
+}
+
+/* Estados de foco para accesibilidad */
+.app-header {
+  .main-nav a:focus,
+  .btn:focus {
+    outline: 2px solid #3B9797;
+    outline-offset: 2px;
+  }
+}

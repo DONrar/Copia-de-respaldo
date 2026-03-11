@@ -1,0 +1,183 @@
+<ion-header [translucent]="true">
+  <ion-toolbar style="--background: #132440; --color: white;">
+    <ion-buttons slot="start">
+      <ion-button (click)="cancelar()" style="--color: white;">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-icon name="pencil" style="color: #3B9797;"></ion-icon>
+      &nbsp;Editar Deuda
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="guardar()" style="--color: white;">
+        <ion-icon name="checkmark" slot="start"></ion-icon>
+        Guardar
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+
+    <!-- Productos -->
+    <ion-card class="card-elevated">
+      <ion-card-header class="card-header-custom">
+        <div class="card-title-with-icon">
+          <div class="title-icon-container primary">
+            <ion-icon name="cart-outline"></ion-icon>
+          </div>
+          <ion-card-title>Productos ({{ productos.length }})</ion-card-title>
+        </div>
+        <p class="card-subtitle">Modifica los productos de la deuda</p>
+      </ion-card-header>
+
+      <ion-card-content>
+        @for (producto of productos; track $index; let i = $index) {
+          <div class="producto-card" [class.last-item]="i === productos.length - 1">
+            <div class="producto-header">
+              <div class="producto-number">
+                <div class="number-badge">{{ i + 1 }}</div>
+                <h3>Producto {{ i + 1 }}</h3>
+              </div>
+              @if (productos.length > 1) {
+                <ion-button
+                  fill="clear"
+                  size="small"
+                  class="btn-eliminar"
+                  (click)="eliminarProducto(i)">
+                  <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+              }
+            </div>
+
+            <div class="producto-form">
+              <ion-item class="custom-input-item">
+                <ion-label position="stacked">Descripción del producto</ion-label>
+                <ion-input
+                  [(ngModel)]="producto.nombre"
+                  placeholder="Ej: Camiseta, Zapatos, etc."
+                  required
+                  class="custom-input"
+                ></ion-input>
+              </ion-item>
+
+              <div class="producto-details">
+                <ion-item class="custom-input-item half">
+                  <ion-label position="stacked">Cantidad</ion-label>
+                  <ion-input
+                    type="number"
+                    [(ngModel)]="producto.cantidad"
+                    min="1"
+                    (ionChange)="calcularSubtotales()"
+                    required
+                    class="custom-input"
+                  ></ion-input>
+                </ion-item>
+
+                <ion-item class="custom-input-item half">
+                  <ion-label position="stacked">Valor unitario</ion-label>
+                  <div class="input-with-currency">
+                    <span class="currency-symbol">$</span>
+                    <ion-input
+                      type="number"
+                      [(ngModel)]="producto.valorUnitario"
+                      min="0"
+                      (ionChange)="calcularSubtotales()"
+                      required
+                      class="custom-input"
+                    ></ion-input>
+                  </div>
+                </ion-item>
+              </div>
+
+              <div class="producto-subtotal">
+                <div class="subtotal-info">
+                  <span class="subtotal-label">Subtotal producto {{ i + 1 }}</span>
+                  <span class="subtotal-amount">{{ formatearMoneda(producto.subtotal) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        <div class="add-product-section">
+          <ion-button
+            expand="block"
+            fill="outline"
+            class="btn-add-product"
+            (click)="agregarProducto()">
+            <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+            Agregar otro producto
+          </ion-button>
+        </div>
+
+        <div class="total-section">
+          <div class="total-header">
+            <ion-icon name="calculator-outline"></ion-icon>
+            <h3>Resumen de la deuda</h3>
+          </div>
+          <div class="total-details">
+            <div class="total-item">
+              <span>Subtotal productos</span>
+              <span>{{ formatearMoneda(calcularSubtotal()) }}</span>
+            </div>
+            <div class="total-final">
+              <span>Total de la deuda</span>
+              <span class="total-amount">{{ formatearMoneda(calcularTotal()) }}</span>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Notas -->
+    <ion-card class="card-elevated">
+      <ion-card-header class="card-header-custom">
+        <div class="card-title-with-icon">
+          <div class="title-icon-container info">
+            <ion-icon name="document-text-outline"></ion-icon>
+          </div>
+          <ion-card-title>Notas y Observaciones</ion-card-title>
+        </div>
+        <p class="card-subtitle">Información adicional sobre la deuda</p>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="notes-container">
+          <div class="notes-icon">
+            <ion-icon name="create-outline"></ion-icon>
+          </div>
+          <ion-textarea
+            [(ngModel)]="notas"
+            label="Notas adicionales"
+            labelPlacement="stacked"
+            placeholder="Ej: Producto pendiente por entregar, condiciones especiales, fecha límite de pago, etc."
+            rows="4"
+            class="custom-textarea"
+            autoGrow="true"
+          ></ion-textarea>
+        </div>
+
+        <div class="notes-hint">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <p>Estas notas solo son visibles para ti, no para el cliente</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Acciones -->
+    <div class="actions-container">
+      <ion-button expand="block" class="btn-success" (click)="guardar()">
+        <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+        Guardar Cambios
+      </ion-button>
+
+      <ion-button expand="block" fill="outline" class="btn-secondary" (click)="cancelar()">
+        <ion-icon name="close-circle" slot="start"></ion-icon>
+        Cancelar
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

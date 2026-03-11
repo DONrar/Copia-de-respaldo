@@ -1,0 +1,571 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import '@ionic/angular/css/palettes/dark.system.css';
+
+// ============================================
+// VARIABLES DE COLOR - TEMA CLARO
+// ============================================
+:root {
+  --app-color-primary: #BF092F;
+  --app-color-dark-bg: #132440;
+  --app-color-secondary: #16476A;
+  --app-color-accent: #3B9797;
+
+  /* Variables para el menú - TEMA CLARO */
+  --menu-background: #f8f9fa;
+  --menu-text-color: #132440;
+  --menu-text-secondary: #666;
+  --menu-border-color: #e0e0e0;
+  --menu-footer-text: #999;
+
+  /* Variables globales para componentes - TEMA CLARO */
+  --bg-primary: #f8f9fa;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-muted: #f0f0f0;
+
+  --text-primary: #132440;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+
+  --border-color: #e0e0e0;
+  --divider-color: #f0f0f0;
+
+  --shadow-sm: rgba(0, 0, 0, 0.06);
+  --shadow-md: rgba(0, 0, 0, 0.1);
+  --shadow-lg: rgba(0, 0, 0, 0.15);
+}
+
+// ============================================
+// VARIABLES DE COLOR - TEMA OSCURO
+// ============================================
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Variables para el menú - TEMA OSCURO */
+    --menu-background: #1e1e1e;
+    --menu-text-color: #ffffff;
+    --menu-text-secondary: #b3b3b3;
+    --menu-border-color: #333333;
+    --menu-footer-text: #808080;
+
+    /* Variables globales para componentes - TEMA OSCURO */
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --bg-card: #1e1e1e;
+    --bg-muted: #2a2a2a;
+
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --text-muted: #808080;
+
+    --border-color: #333333;
+    --divider-color: #2a2a2a;
+
+    --shadow-sm: rgba(0, 0, 0, 0.3);
+    --shadow-md: rgba(0, 0, 0, 0.5);
+    --shadow-lg: rgba(0, 0, 0, 0.7);
+  }
+}
+
+:host {
+  /* Paleta */
+  --app-accent:   #BF092F; /* rojo */
+  --app-primary:  #132440; /* navy */
+  --app-secondary:#16476A; /* azul petróleo */
+  --app-teal:     #3B9797; /* teal */
+
+  /* Derivados */
+  --app-on-dark:  #ffffff;
+  --app-on-light: #0f1a2c;
+  --app-surface:  #ffffff;
+  --app-surface-2: rgba(255,255,255,0.85);
+  --app-shadow: 0 8px 24px rgba(0,0,0,.18);
+}
+
+// ============================================
+// ESTILOS DEL MENÚ - ADAPTABLES A TEMA
+// ============================================
+
+/* Menú personalizado */
+.custom-menu {
+  --width: 280px;
+  --min-width: 280px;
+}
+
+.menu-content {
+  --background: var(--menu-background);
+}
+
+/* Header del menú */
+.menu-header {
+  padding: 20px 16px;
+  background: linear-gradient(135deg, #132440 0%, #16476A 100%);
+  color: white;
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.2);
+
+  ion-icon {
+    font-size: 24px;
+    color: white;
+  }
+}
+
+.app-info h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: white;
+}
+
+.app-info p {
+  font-size: 12px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Lista del menú */
+.menu-list {
+  background: transparent;
+  padding: 8px 0;
+}
+
+.menu-item {
+  --background: transparent;
+  --background-hover: rgba(59, 151, 151, 0.1);
+  --background-activated: rgba(59, 151, 151, 0.15);
+  --border-radius: 0;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 0;
+  margin: 4px 8px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    --background: rgba(59, 151, 151, 0.08);
+  }
+}
+
+.menu-item-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.menu-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+
+  ion-icon {
+    font-size: 20px;
+  }
+
+  /* Colores específicos para cada ícono */
+  &.dashboard {
+    background: rgba(22, 71, 106, 0.1);
+
+    ion-icon {
+      color: #16476A;
+    }
+  }
+
+  &.clients {
+    background: rgba(59, 151, 151, 0.1);
+
+    ion-icon {
+      color: #3B9797;
+    }
+  }
+
+  &.search {
+    background: rgba(191, 9, 47, 0.1);
+
+    ion-icon {
+      color: #BF092F;
+    }
+  }
+
+  &.settings {
+    background: rgba(102, 102, 102, 0.1);
+
+    ion-icon {
+      color: #666;
+    }
+  }
+}
+
+/* IMPORTANTE: Color del texto adaptable al tema */
+.menu-item ion-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--menu-text-color) !important;
+  margin: 0;
+}
+
+/* Estado activo/selected */
+.menu-item.selected {
+  --background: rgba(59, 151, 151, 0.15);
+  border-left: 4px solid #3B9797;
+
+  .menu-icon {
+    transform: scale(1.1);
+
+    &.dashboard {
+      background: rgba(22, 71, 106, 0.2);
+    }
+
+    &.clients {
+      background: rgba(59, 151, 151, 0.2);
+    }
+
+    &.search {
+      background: rgba(191, 9, 47, 0.2);
+    }
+
+    &.settings {
+      background: rgba(102, 102, 102, 0.2);
+    }
+  }
+
+  ion-label {
+    font-weight: 600;
+    color: var(--menu-text-color) !important;
+  }
+}
+
+/* Footer del menú */
+.menu-footer {
+  padding: 20px 16px;
+  border-top: 1px solid var(--menu-border-color);
+  margin-top: auto;
+}
+
+.app-version {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+
+  ion-icon {
+    font-size: 16px;
+    color: #3B9797;
+  }
+
+  span {
+    font-size: 12px;
+    color: var(--menu-text-secondary);
+    font-weight: 500;
+  }
+}
+
+.footer-text {
+  font-size: 11px;
+  color: var(--menu-footer-text);
+  margin: 0;
+  text-align: center;
+}
+
+/* Animaciones */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.menu-item {
+  animation: slideInLeft 0.3s ease;
+}
+
+.menu-item:nth-child(1) { animation-delay: 0.1s; }
+.menu-item:nth-child(2) { animation-delay: 0.15s; }
+.menu-item:nth-child(3) { animation-delay: 0.2s; }
+.menu-item:nth-child(4) { animation-delay: 0.25s; }
+
+/* Efectos de hover mejorados */
+.menu-item {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s ease;
+  }
+
+  &:hover::before {
+    left: 100%;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .custom-menu {
+    --width: 260px;
+    --min-width: 260px;
+  }
+
+  .menu-header {
+    padding: 16px 12px;
+  }
+
+  .logo-icon {
+    width: 44px;
+    height: 44px;
+
+    ion-icon {
+      font-size: 22px;
+    }
+  }
+
+  .app-info h2 {
+    font-size: 16px;
+  }
+
+  .menu-item {
+    margin: 2px 6px;
+    --padding-start: 12px;
+    --padding-end: 12px;
+  }
+
+  .menu-icon {
+    width: 36px;
+    height: 36px;
+
+    ion-icon {
+      font-size: 18px;
+    }
+  }
+}
+
+/* Estados de carga */
+.menu-skeleton {
+  .menu-item {
+    pointer-events: none;
+  }
+
+  .menu-icon {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+
+    ion-icon {
+      opacity: 0;
+    }
+  }
+
+  ion-label {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 4px;
+    height: 16px;
+  }
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// ============================================
+// ESTILOS GLOBALES PARA BOTONES FLOTANTES (FAB)
+// ============================================
+
+// Variable CSS personalizada para el offset del FAB
+:root {
+  --fab-bottom-offset: calc(20px + env(safe-area-inset-bottom, 0px));
+}
+
+// Aplicar a todos los FABs en posición bottom
+ion-fab[vertical="bottom"] {
+  margin-bottom: var(--fab-bottom-offset);
+
+  // Fallback para navegadores antiguos
+  @supports not (margin-bottom: env(safe-area-inset-bottom)) {
+    margin-bottom: 70px;
+  }
+
+  // Ajuste para pantallas pequeñas con navegación por botones
+  @media (max-height: 667px) {
+    margin-bottom: calc(24px + env(safe-area-inset-bottom, 60px));
+  }
+}
+
+// Asegurar que el contenido no quede oculto bajo el FAB
+ion-content {
+  --padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+}
+
+// ============================================
+// SOPORTE ADICIONAL PARA TEMA OSCURO EN TODA LA APP
+// ============================================
+
+/* Ajustes globales para tema oscuro */
+@media (prefers-color-scheme: dark) {
+  /* Tarjetas y contenedores */
+  ion-card {
+    --background: #1e1e1e;
+    --color: #ffffff;
+  }
+
+  /* Items de listas */
+  ion-item {
+    --background: transparent;
+    --color: #ffffff;
+    --border-color: #333333;
+  }
+
+  /* Labels */
+  ion-label {
+    color: #ffffff;
+  }
+
+  /* Badges */
+  ion-badge {
+    &.pending {
+      background: rgba(191, 9, 47, 0.3);
+      color: #ff6b85;
+    }
+
+    &.paid {
+      background: rgba(59, 151, 151, 0.3);
+      color: #6dd4d4;
+    }
+  }
+
+  /* Contenedores de sección */
+  .section-title {
+    color: #ffffff;
+  }
+
+  .section-badge {
+    background: #16476A;
+    color: white;
+  }
+
+  /* Información del cliente */
+  .cliente-nombre,
+  .info-value,
+  .stat-number,
+  .monto-value {
+    color: #ffffff !important;
+  }
+
+  .info-label,
+  .stat-label,
+  .monto-label,
+  .cliente-desde {
+    color: #b3b3b3 !important;
+  }
+
+  /* Notas */
+  .cliente-notas,
+  .deuda-notas {
+    background: rgba(59, 151, 151, 0.15);
+    color: #b3b3b3;
+  }
+
+  /* Empty states */
+  .empty-state {
+    h2 {
+      color: #ffffff;
+    }
+
+    p {
+      color: #b3b3b3;
+    }
+  }
+
+  /* Cards de deuda */
+  .deuda-card {
+    --background: #1e1e1e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .deuda-fecha {
+    color: #b3b3b3;
+  }
+
+  /* Stats cards */
+  .stat-card {
+    background: #1e1e1e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Contenedor principal */
+  .container {
+    background: #121212;
+  }
+}

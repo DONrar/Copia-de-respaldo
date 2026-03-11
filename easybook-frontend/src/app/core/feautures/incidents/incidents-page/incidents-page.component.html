@@ -1,0 +1,123 @@
+<body>
+  <h2 class="section-title">Incidencias de Limpieza</h2>
+
+  <div class="tabs">
+    <button class="tab" [class.active]="tab()==='PENDING'" (click)="setTab('PENDING')">
+      <span>Pendientes</span>
+    </button>
+    <button class="tab" [class.active]="tab()==='DONE'" (click)="setTab('DONE')">
+      <span>Resueltas</span>
+    </button>
+  </div>
+
+  <section class="card" *ngIf="tab()==='PENDING'">
+    <h3>🔄 Incidencias Pendientes</h3>
+    <table class="table" *ngIf="pending().length; else emptyP">
+      <thead>
+        <tr>
+          <th>Habitación</th>
+          <th>Estado</th>
+          <th>Asignado a</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let inc of pending()">
+          <td>
+            <strong>#{{ inc.roomNumber }}</strong>
+          </td>
+          <td>
+            <span class="badge" [class.assigned]="inc.status==='ASSIGNED'">
+              {{ inc.status === 'ASSIGNED' ? 'ASIGNADA' : 'PENDIENTE' }}
+            </span>
+          </td>
+          <td>{{ inc.assignedStaffEmail || '—' }}</td>
+          <td>
+            <button class="btn" (click)="toggleAssign(inc)">
+              👤 Asignar
+            </button>
+            <button class="btn btn-ok" (click)="toggleResolve(inc)">
+              ✅ Resolver
+            </button>
+          </td>
+        </tr>
+
+        <!-- Asignar -->
+        <tr *ngIf="assignId()===incToogleId">
+          <td colspan="4" class="subrow">
+            <label>Email del personal</label>
+            <input [(ngModel)]="assignEmail" placeholder="staff1@mail.com" />
+            <button class="btn" (click)="assign()">💾 Guardar</button>
+            <button class="btn btn-ghost" (click)="cancelAssign()">❌ Cancelar</button>
+          </td>
+        </tr>
+
+        <!-- Resolver -->
+        <tr *ngIf="resolveId()===incToogleId">
+          <td colspan="4" class="subrow">
+            <div class="resolve">
+              <div class="line">
+                <div>
+                  <label>Producto</label>
+                  <select [(ngModel)]="consName">
+                    <option [ngValue]="''" disabled>Selecciona…</option>
+                    <option *ngFor="let it of inventoryNames()" [value]="it">{{ it }}</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Cantidad</label>
+                  <input type="number" [(ngModel)]="consQty" min="1" />
+                </div>
+                <div>
+                  <button class="btn" (click)="addCons()">➕ Añadir</button>
+                </div>
+              </div>
+
+              <ul class="cons-list" *ngIf="consumptions().length">
+                <li *ngFor="let c of consumptions(); let i=index">
+                  <span>{{ c.name }} — {{ c.quantity }} unidades</span>
+                  <button class="link" (click)="removeCons(i)">🗑️ Quitar</button>
+                </li>
+              </ul>
+
+              <button class="btn btn-ok" [disabled]="!consumptions().length || loading()" (click)="resolve()">
+                🎯 Resolver incidencia
+              </button>
+              <button class="btn btn-ghost" (click)="cancelResolve()">❌ Cancelar</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #emptyP>
+      <p class="muted">No hay incidencias pendientes.</p>
+    </ng-template>
+  </section>
+
+  <section class="card" *ngIf="tab()==='DONE'">
+    <h3>✅ Incidencias Resueltas</h3>
+    <table class="table" *ngIf="done().length; else emptyD">
+      <thead>
+        <tr>
+          <th>Habitación</th>
+          <th>Asignado a</th>
+          <th>Creada</th>
+          <th>Resuelta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let inc of done()">
+          <td><strong>#{{ inc.roomNumber }}</strong></td>
+          <td>{{ inc.assignedStaffEmail || '—' }}</td>
+          <td>{{ (inc.createdAt || '') | date:'short' }}</td>
+          <td>{{ (inc.resolvedAt || '') | date:'short' }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #emptyD>
+      <p class="muted">No hay incidencias resueltas.</p>
+    </ng-template>
+  </section>
+
+  <p class="error" *ngIf="error()">{{ error() }}</p>
+</body>

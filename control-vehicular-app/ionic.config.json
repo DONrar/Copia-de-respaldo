@@ -1,0 +1,7 @@
+{
+  "name": "control-vehicular-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

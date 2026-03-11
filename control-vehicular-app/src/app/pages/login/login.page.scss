@@ -1,0 +1,165 @@
+// src/app/pages/login/login.page.scss
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+  padding: 20px;
+}
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: fadeInDown 0.8s ease-out;
+
+  .logo-icon {
+    font-size: 80px;
+    margin-bottom: 10px;
+  }
+
+  .app-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 10px 0;
+    color: var(--ion-color-primary);
+  }
+
+  .app-subtitle {
+    font-size: 16px;
+    color: var(--ion-color-medium);
+    margin: 0;
+  }
+}
+
+.login-card {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  animation: fadeInUp 0.8s ease-out;
+
+  ion-card-header {
+    padding-bottom: 10px;
+
+    ion-card-title {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    ion-card-subtitle {
+      margin-top: 5px;
+      font-size: 14px;
+    }
+  }
+
+  ion-card-content {
+    padding-top: 20px;
+  }
+}
+
+.input-item {
+  --background: #f5f5f5;
+  --border-radius: 12px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 0;
+  margin-bottom: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+
+  ion-icon {
+    margin-right: 12px;
+  }
+
+  ion-input {
+    --padding-start: 0;
+    font-size: 16px;
+  }
+
+  &:focus-within {
+    border-color: var(--ion-color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--ion-color-primary-rgb), 0.1);
+  }
+}
+
+.error-message {
+  margin: 16px 0;
+  padding: 12px;
+  background: rgba(var(--ion-color-danger-rgb), 0.1);
+  border-radius: 8px;
+
+  p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+  }
+
+  ion-icon {
+    font-size: 18px;
+  }
+}
+
+.login-button {
+  margin-top: 24px;
+  height: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  --border-radius: 12px;
+
+  ion-spinner {
+    margin-right: 8px;
+  }
+}
+
+.test-button {
+  margin-top: 12px;
+  height: 44px;
+  font-size: 14px;
+  --border-radius: 12px;
+}
+
+.footer {
+  margin-top: 40px;
+  padding: 20px 0;
+
+  p {
+    margin: 8px 0;
+  }
+
+  small {
+    font-size: 12px;
+  }
+}
+
+// Animaciones
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive
+@media (min-width: 768px) {
+  .login-card {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}

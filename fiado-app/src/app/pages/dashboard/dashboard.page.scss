@@ -1,0 +1,386 @@
+.container {
+  padding: 16px;
+  // Aumentado padding-bottom para compensar FAB y botones del sistema
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+  background: #132440;
+}
+
+ion-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  ion-icon {
+    font-size: 24px;
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  margin: 0;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  ion-card-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+  }
+
+  .stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.2);
+
+    ion-icon {
+      font-size: 28px;
+      color: white;
+    }
+  }
+
+  .stat-info {
+    flex: 1;
+
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+      color: white;
+    }
+
+    p {
+      font-size: 12px;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  &.primary {
+    background: linear-gradient(135deg, #16476A 0%, #3B9797 100%);
+  }
+
+  &.success {
+    background: linear-gradient(135deg, #11998e 0%, #3B9797 100%);
+  }
+
+  &.info {
+    background: linear-gradient(135deg, #132440 0%, #16476A 100%);
+  }
+
+  &.clients {
+    background: linear-gradient(135deg, #BF092F 0%, #fa709a 100%);
+    position: relative;
+    overflow: hidden;
+
+    // Overlay para indicar que es clickable
+    .card-overlay {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 40px;
+      background: rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+
+      .overlay-icon {
+        font-size: 20px;
+        color: white;
+      }
+    }
+
+    &:hover .card-overlay {
+      opacity: 1;
+    }
+  }
+}
+
+.card-elevated {
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.card-header-custom {
+  padding-bottom: 8px;
+
+  ion-card-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #132440;
+  }
+}
+
+.deudas-resumen {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+
+  .resumen-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    .resumen-icon-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-bottom: 12px;
+
+      ion-icon {
+        font-size: 28px;
+        color: white;
+      }
+
+      &.primary {
+        background: #16476A;
+      }
+
+      &.success {
+        background: #3B9797;
+      }
+
+      &.warning {
+        background: #BF092F;
+      }
+    }
+
+    h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+      color: #132440;
+    }
+
+    p {
+      font-size: 12px;
+      margin: 0;
+      color: #666;
+    }
+  }
+}
+
+.card-header-with-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  ion-card-title {
+    font-size: 18px;
+  }
+}
+
+.btn-see-all {
+  --color: #3B9797;
+  --background: transparent;
+  font-weight: 500;
+}
+
+.custom-list {
+  background: transparent;
+  padding: 0;
+}
+
+.custom-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --border-color: rgba(0, 0, 0, 0.05);
+  margin-bottom: 8px;
+  border-radius: 12px;
+  transition: background-color 0.2s ease;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &:hover {
+    --background: rgba(59, 151, 151, 0.05);
+  }
+}
+
+.item-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  margin-right: 12px;
+
+  ion-icon {
+    font-size: 20px;
+    color: white;
+  }
+
+  &.primary {
+    background: #16476A;
+  }
+
+  &.success {
+    background: #3B9797;
+  }
+
+  &.warning {
+    background: #BF092F;
+  }
+}
+
+.cliente-saldo {
+  font-weight: 700;
+  font-size: 16px;
+  color: #BF092F;
+}
+
+.deuda-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+
+  .monto {
+    font-weight: 600;
+    font-size: 14px;
+    color: #132440;
+  }
+}
+
+.badge-success, .badge-warning {
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.badge-success {
+  background: #3B9797;
+  color: white;
+}
+
+.badge-warning {
+  background: #BF092F;
+  color: white;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+
+  .empty-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(59, 151, 151, 0.1);
+    margin-bottom: 24px;
+
+    ion-icon {
+      font-size: 60px;
+      color: #3B9797;
+    }
+  }
+
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #132440;
+  }
+
+  p {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+}
+
+.btn-primary {
+  --background: #16476A;
+  --background-activated: #132440;
+  --background-hover: #3B9797;
+  --color: white;
+  --border-radius: 12px;
+  font-weight: 600;
+  height: 48px;
+}
+
+.fab-primary {
+  --background: #BF092F;
+  --background-activated: #132440;
+  --background-hover: #16476A;
+}
+
+// ============================================
+// AJUSTES PARA BOTÓN FLOTANTE (FAB)
+// ============================================
+ion-fab {
+  // Ajustar margen inferior considerando safe areas del dispositivo
+  margin-bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+  margin-right: 16px;
+
+  // Fallback para navegadores que no soportan env()
+  @supports not (margin-bottom: env(safe-area-inset-bottom)) {
+    margin-bottom: 70px;
+  }
+}
+
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    .stat-info h2 {
+      font-size: 20px;
+    }
+  }
+
+  .deudas-resumen {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  // Ajuste adicional para pantallas pequeñas
+  ion-fab {
+    margin-bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
+
+    @supports not (margin-bottom: env(safe-area-inset-bottom)) {
+      margin-bottom: 80px;
+    }
+  }
+}

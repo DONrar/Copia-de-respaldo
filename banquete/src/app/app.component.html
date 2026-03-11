@@ -1,0 +1,30 @@
+<!-- Barra de progreso de scroll -->
+<div class="scroll-progress"></div>
+
+<header class="nav" appReveal revealDirection="down" [revealDelay]="50">
+  <a class="brand" routerLink="" appTilt [tiltMax]="8" [tiltScale]="1.02" [glare]="true">
+    <span class="logo-dot"></span>
+    <span>Banquete de Eventos</span>
+  </a>
+
+  <nav class="menu">
+    <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="link-underline" appReveal [revealDelay]="80">Inicio</a>
+    <a routerLink="servicios" routerLinkActive="active" class="link-underline" appReveal [revealDelay]="120">Servicios</a>
+    <a routerLink="eventos" routerLinkActive="active" class="link-underline" appReveal [revealDelay]="160">Eventos</a>
+    <a routerLink="paquetes" routerLinkActive="active" class="link-underline" appReveal [revealDelay]="200">Paquetes</a>
+    <a routerLink="contacto" routerLinkActive="active" class="btn slide btn-sm" appReveal [revealDelay]="240">Contacto</a>
+  </nav>
+</header>
+
+<main class="viewport">
+  <router-outlet />
+</main>
+
+<a class="wa-fab" target="_blank"
+   href="https://wa.me/573235162298?text=Hola%20quiero%20cotizar%20un%20evento">
+  <span class="wa-label">WhatsApp</span>
+</a>
+
+<footer class="footer">
+  <p>© {{ currentYear }} Banquete de Eventos — Todos los derechos reservados</p>
+</footer>

@@ -1,0 +1,321 @@
+ <!-- Hero de Paquetes -->
+    <section class="packages-hero" appReveal>
+      <div class="hero-bg-gradient"></div>
+      <div class="container">
+        <div class="hero-content">
+          <span class="section-badge" @scaleIn>💎 Nuestros paquetes</span>
+          <h1 @fadeInUp>
+            Elige la <span class="gradient-text">experiencia perfecta</span>
+          </h1>
+          <p class="hero-subtitle" @fadeInUp>
+            Diseñados para hacer de tu evento algo extraordinario, con opciones que se adaptan a tu visión y presupuesto
+          </p>
+        </div>
+
+        <!-- Selector de vista -->
+        <div class="view-toggle" appReveal revealDirection="scale">
+          <button
+            [class.active]="viewMode() === 'grid'"
+            (click)="viewMode.set('grid')"
+            class="toggle-btn">
+            <span class="icon">▦</span> Vista Grid
+          </button>
+          <button
+            [class.active]="viewMode() === 'compare'"
+            (click)="viewMode.set('compare')"
+            class="toggle-btn">
+            <span class="icon">⚖</span> Comparar
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grid de Paquetes -->
+    <section class="packages-section" [class.compare-mode]="viewMode() === 'compare'">
+      <div class="container">
+        <div class="packages-grid" [class.compare-view]="viewMode() === 'compare'">
+          @for (pkg of packages; track pkg.id; let idx = $index) {
+            <article
+              class="package-card"
+              [class.popular]="pkg.popular"
+              [class.selected]="selectedPackage() === pkg.id"
+              [attr.data-color]="pkg.color"
+              appTilt
+              [tiltMax]="viewMode() === 'compare' ? 0 : 10"
+              [tiltScale]="1.02"
+              [glare]="true"
+              appReveal
+              revealDirection="up"
+              [revealDelay]="idx * 150"
+              @fadeInUp>
+
+              @if (pkg.popular) {
+                <div class="popular-badge">
+                  <span class="badge-icon">⭐</span>
+                  <span>Más Popular</span>
+                </div>
+              }
+
+              <!-- Header del paquete -->
+              <div class="package-header" [style.background]="pkg.gradient">
+                <div class="package-icon">{{ pkg.icon }}</div>
+                <h3 class="package-name">{{ pkg.name }}</h3>
+                <p class="package-description">{{ pkg.description }}</p>
+              </div>
+
+              <!-- Precio -->
+              <div class="package-pricing">
+                <div class="price-wrapper">
+                  <span class="currency">$</span>
+                  <span class="price-amount">{{ pkg.pricePerPerson }}</span>
+                  <span class="price-unit">/persona</span>
+                </div>
+                <p class="price-note">Incluye impuestos y servicio básico</p>
+              </div>
+
+              <!-- Features -->
+              <ul class="package-features">
+                @for (feature of pkg.features; track feature) {
+                  <li class="feature-item">
+                    <span class="feature-check" [style.background]="pkg.gradient">✓</span>
+                    <span>{{ feature }}</span>
+                  </li>
+                }
+              </ul>
+
+              <!-- CTA -->
+              <button
+                class="package-cta"
+                [class.selected]="selectedPackage() === pkg.id"
+                [style.background]="selectedPackage() === pkg.id ? pkg.gradient : ''"
+                (click)="selectPackage(pkg.id)">
+                @if (selectedPackage() === pkg.id) {
+                  <span>✓ Seleccionado</span>
+                } @else {
+                  <span>Seleccionar Paquete</span>
+                }
+              </button>
+            </article>
+          }
+        </div>
+
+        <!-- Tabla de comparación (solo visible en modo compare) -->
+        @if (viewMode() === 'compare') {
+          <div class="comparison-table" appReveal revealDirection="up" [revealDelay]="400">
+            <h3>Comparación Detallada</h3>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Característica</th>
+                    @for (pkg of packages; track pkg.id) {
+                      <th [style.color]="pkg.color">{{ pkg.name }}</th>
+                    }
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (feature of allFeatures; track feature) {
+                    <tr>
+                      <td class="feature-name">{{ feature }}</td>
+                      @for (pkg of packages; track pkg.id) {
+                        <td class="feature-check-cell">
+                          @if (pkg.features.includes(feature)) {
+                            <span class="check-icon" [style.color]="pkg.color">✓</span>
+                          } @else {
+                            <span class="cross-icon">—</span>
+                          }
+                        </td>
+                      }
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Calculadora Interactiva -->
+    @if (selectedPackage() && showQuote()) {
+      <section class="quote-section" @fadeInUp>
+        <div class="container">
+          <div class="quote-wrapper">
+            <div class="quote-header">
+              <h2>Cotiza tu <span class="gradient-text">{{ selectedPackageName() }}</span></h2>
+              <p>Personaliza tu experiencia y obtén una estimación instantánea</p>
+            </div>
+
+            <div class="quote-grid">
+              <!-- Formulario de cotización -->
+              <div class="quote-form">
+                <div class="form-section">
+                  <h4>📅 Detalles del Evento</h4>
+
+                  <div class="form-group">
+                    <label>Tipo de evento</label>
+                    <select [(ngModel)]="quoteData.eventType" (change)="calculateTotal()">
+                      <option value="wedding">💍 Boda</option>
+                      <option value="corporate">🏢 Evento Corporativo</option>
+                      <option value="birthday">🎂 Cumpleaños</option>
+                      <option value="quinceanera">👑 Quinceañera</option>
+                      <option value="babyShower">👶 Baby Shower</option>
+                      <option value="graduation">🎓 Graduación</option>
+                      <option value="other">🎉 Otro</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Fecha del evento</label>
+                    <input
+                      type="date"
+                      [(ngModel)]="quoteData.eventDate"
+                      [min]="minDate"
+                      (change)="calculateTotal()">
+                  </div>
+
+                  <div class="form-group">
+                    <label>
+                      Número de invitados
+                      <span class="guest-count">{{ quoteData.guests }}</span>
+                    </label>
+                    <input
+                      type="range"
+                      min="20"
+                      max="500"
+                      step="10"
+                      [(ngModel)]="quoteData.guests"
+                      (input)="calculateTotal()"
+                      class="range-slider">
+                    <div class="range-labels">
+                      <span>20</span>
+                      <span>500</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-section">
+                  <h4>✨ Servicios Adicionales</h4>
+
+                  <label class="checkbox-card" *ngFor="let service of additionalServices">
+                    <input
+                      type="checkbox"
+                      [value]="service.id"
+                      [checked]="quoteData.additionalServices.includes(service.id)"
+                      (change)="toggleService(service.id)">
+                    <div class="checkbox-content">
+                      <span class="service-icon">{{ service.icon }}</span>
+                      <div class="service-info">
+                        <strong>{{ service.name }}</strong>
+                        <span class="service-price">+${{ service.price }}/persona</span>
+                      </div>
+                    </div>
+                    <span class="checkbox-check">✓</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Resumen de cotización -->
+              <div class="quote-summary">
+                <div class="summary-card">
+                  <div class="summary-header">
+                    <h4>Resumen de Cotización</h4>
+                    <span class="package-badge" [style.background]="selectedPackageGradient()">
+                      {{ selectedPackageName() }}
+                    </span>
+                  </div>
+
+                  <div class="summary-breakdown">
+                    <div class="breakdown-item">
+                      <span>Paquete base</span>
+                      <span>\${{ basePrice() | number }}</span>
+                    </div>
+                    <div class="breakdown-item">
+                      <span>{{ quoteData.guests }} invitados</span>
+                      <span>\${{ guestsPrice() | number }}</span>
+                    </div>
+                    @if (additionalServicesPrice() > 0) {
+                      <div class="breakdown-item">
+                        <span>Servicios adicionales</span>
+                        <span>\${{ additionalServicesPrice() | number }}</span>
+                      </div>
+                    }
+                    <div class="breakdown-divider"></div>
+                    <div class="breakdown-item subtotal">
+                      <span>Subtotal</span>
+                      <span>\${{ subtotal() | number }}</span>
+                    </div>
+                    <div class="breakdown-item">
+                      <span>Impuestos (19%)</span>
+                      <span>\${{ taxes() | number }}</span>
+                    </div>
+                  </div>
+
+                  <div class="summary-total">
+                    <span>Total Estimado</span>
+                    <div class="total-amount">\${{ totalPrice() | number }}</div>
+                  </div>
+
+                  <p class="summary-note">
+                    * Precio estimado. La cotización final puede variar según personalización y servicios específicos.
+                  </p>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="quote-actions">
+                  <button class="btn-action btn-whatsapp" (click)="sendToWhatsApp()">
+                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    <span>Enviar por WhatsApp</span>
+                  </button>
+
+                  <button class="btn-action btn-email" (click)="sendToEmail()">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    <span>Enviar por Email</span>
+                  </button>
+
+                  <button class="btn-action btn-save" (click)="saveQuote()">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+                    </svg>
+                    <span>Guardar Cotización</span>
+                  </button>
+                </div>
+
+                @if (quoteSaved()) {
+                  <div class="success-message" @scaleIn>
+                    <span class="success-icon">✓</span>
+                    <span>Cotización guardada correctamente</span>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    }
+
+    <!-- CTA Final -->
+    <section class="packages-cta" appReveal>
+      <div class="cta-content">
+        <div class="cta-icon">💫</div>
+        <h2>¿Necesitas algo más personalizado?</h2>
+        <p>Nuestro equipo está listo para crear una experiencia única diseñada específicamente para tu evento</p>
+        <div class="cta-buttons">
+          <button class="btn btn-primary pulse" (click)="contactAdvisor()">
+            Hablar con un Asesor
+          </button>
+          <button class="btn btn-outline">
+            Ver Portfolio Completo
+          </button>
+        </div>
+      </div>
+      <div class="floating-elements">
+        <div class="float-shape shape-1"></div>
+        <div class="float-shape shape-2"></div>
+        <div class="float-shape shape-3"></div>
+      </div>
+    </section>

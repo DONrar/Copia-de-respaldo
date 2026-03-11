@@ -1,0 +1,610 @@
+<!-- Hero Section con video background -->
+<section class="hero" (scroll)="onScroll($event)">
+  <!-- Video Background -->
+  <div class="video-background">
+    <video autoplay muted loop playsinline>
+      <source src="/public/video.mp4" type="video/mp4">
+      <source src="assets/videos/hero-background.webm" type="video/webm">
+      <!-- Fallback image -->
+      <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070" alt="Event background">
+    </video>
+    <div class="video-overlay"></div>
+  </div>
+
+  <div class="hero-grid">
+    <div class="hero-text" appReveal revealDirection="up" [revealDelay]="100">
+      <span class="badge-new">✨ Innovación en eventos</span>
+      <h1 class="hero-title">
+        Experiencias que
+        <span class="gradient-text">celebran la vida</span>
+      </h1>
+      <p class="hero-subtitle">
+        Creamos banquetes memorables con diseño vanguardista, sabor excepcional
+        y servicio impecable. Cada detalle cuenta una historia única.
+      </p>
+
+      <div class="cta-row">
+        <button (click)="openContactModal()" class="btn btn-primary pulse">
+          <span>💬</span> Cotiza ahora
+        </button>
+        <a routerLink="/paquetes" class="btn btn-outline">
+          <span>🎁</span> Ver paquetes
+        </a>
+      </div>
+
+      <!-- Stats rápidos -->
+      <div class="quick-stats" appReveal revealDirection="scale" [revealDelay]="300">
+        <div class="stat-item" *ngFor="let stat of stats">
+          <span class="stat-icon">{{stat.icon}}</span>
+          <strong>{{stat.value}}</strong>
+          <span>{{stat.label}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid de imágenes con efectos tilt -->
+    <figure class="tile tile-1 hover-zoom"
+            appTilt [tiltMax]="8" [tiltScale]="1.02" [glare]="true"
+            appReveal revealDirection="right" [revealDelay]="200">
+      <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=1200"
+           alt="Banquete elegante"/>
+      <div class="tile-overlay">
+        <span class="tile-tag">Bodas de ensueño</span>
+      </div>
+    </figure>
+
+    <figure class="tile tile-2 tall hover-overlay"
+            appTilt [tiltMax]="10" [tiltScale]="1.03"
+            appReveal revealDirection="up" [revealDelay]="300">
+      <img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=1200"
+           alt="Decoración premium"/>
+      <figcaption class="overlay-text">
+        <span class="overlay-icon">✨</span>
+        <strong>Detalles que brillan</strong>
+      </figcaption>
+    </figure>
+
+    <figure class="tile tile-3 wide filter-bright hover-zoom"
+            appTilt [tiltMax]="6" [tiltScale]="1.02" [glare]="true"
+            appReveal revealDirection="left" [revealDelay]="400">
+      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200"
+           alt="Mesa de boda"/>
+      <div class="tile-badge">Premium</div>
+    </figure>
+
+    <figure class="tile tile-4 hover-overlay"
+            appTilt [tiltMax]="12" [tiltScale]="1.04"
+            appReveal revealDirection="down" [revealDelay]="500">
+      <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=1200"
+           alt="Evento corporativo"/>
+      <div class="tile-overlay">
+        <span class="tile-tag">Corporativos</span>
+      </div>
+    </figure>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="scroll-indicator" appReveal revealDirection="down" [revealDelay]="600">
+    <span class="mouse"></span>
+    <span class="scroll-text">Descubre más</span>
+  </div>
+</section>
+
+<!-- Sección de servicios con chips interactivos -->
+<section class="services-section" appReveal>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Nuestros servicios</span>
+      <h2>Diseño <span class="plus">+</span> Sabor <span class="plus">+</span> Servicio</h2>
+      <p class="section-subtitle">
+        Una propuesta visual asimétrica con micro-interacciones y experiencia inmersiva
+      </p>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card" appReveal revealDirection="up" [revealDelay]="100">
+        <div class="service-icon gradient-bg-1">🎨</div>
+        <h3>Diseño Personalizado</h3>
+        <p>Espacios únicos que reflejan tu estilo y personalidad</p>
+        <ul class="service-features">
+          <li>✓ Concepto creativo exclusivo</li>
+          <li>✓ Decoración a medida</li>
+          <li>✓ Montaje profesional</li>
+        </ul>
+      </div>
+
+      <div class="service-card" appReveal revealDirection="up" [revealDelay]="200">
+        <div class="service-icon gradient-bg-2">🍽️</div>
+        <h3>Gastronomía Gourmet</h3>
+        <p>Menús diseñados por chefs con ingredientes premium</p>
+        <ul class="service-features">
+          <li>✓ Menús personalizados</li>
+          <li>✓ Degustación previa</li>
+          <li>✓ Opciones vegetarianas</li>
+        </ul>
+      </div>
+
+      <div class="service-card" appReveal revealDirection="up" [revealDelay]="300">
+        <div class="service-icon gradient-bg-3">⚡</div>
+        <h3>Servicio Impecable</h3>
+        <p>Personal capacitado para superar expectativas</p>
+        <ul class="service-features">
+          <li>✓ Coordinación total</li>
+          <li>✓ Atención 24/7</li>
+          <li>✓ Equipo profesional</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Chips de categorías -->
+    <div class="chips-container" appReveal revealDirection="scale" [revealDelay]="400">
+      <span class="chips-label">Especialidades:</span>
+      <div class="chips">
+        <div class="chip">💍 Bodas</div>
+        <div class="chip">🏢 Empresariales</div>
+        <div class="chip">🎂 Cumpleaños</div>
+        <div class="chip">🎭 Temáticos</div>
+        <div class="chip">🎓 Graduaciones</div>
+        <div class="chip">👶 Baby Showers</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Calculadora de Presupuesto en Tiempo Real -->
+<section class="calculator-section" appReveal>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Calculadora</span>
+      <h2>Estima tu <span class="gradient-text">inversión</span></h2>
+    </div>
+
+    <div class="calculator-grid">
+      <div class="calculator-form">
+        <div class="calc-field">
+          <label>Tipo de evento</label>
+          <select [(ngModel)]="calculator.eventType" (change)="updateCalculation()">
+            <option value="wedding">💍 Boda</option>
+            <option value="corporate">🏢 Corporativo</option>
+            <option value="birthday">🎂 Cumpleaños</option>
+            <option value="quinceanera">👑 Quinceañera</option>
+            <option value="babyShower">👶 Baby Shower</option>
+          </select>
+        </div>
+
+        <div class="calc-field">
+          <label>Número de invitados: {{ calculator.guests }}</label>
+          <input type="range" min="20" max="500" step="10"
+                 [(ngModel)]="calculator.guests"
+                 (input)="updateCalculation()">
+        </div>
+
+        <div class="calc-options">
+          <label class="checkbox">
+            <input type="checkbox" [(ngModel)]="calculator.catering" (change)="updateCalculation()">
+            <span>🍽️ Servicio de catering</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" [(ngModel)]="calculator.decoration" (change)="updateCalculation()">
+            <span>🎨 Decoración premium</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" [(ngModel)]="calculator.entertainment" (change)="updateCalculation()">
+            <span>🎤 Entretenimiento</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" [(ngModel)]="calculator.photography" (change)="updateCalculation()">
+            <span>📸 Fotografía profesional</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="calculator-result">
+        <div class="result-card">
+          <h3>Presupuesto estimado</h3>
+          <div class="result-price">{{ calculatedPrice() | currency:'USD':'symbol':'1.0-0' }}</div>
+          <p>Incluye impuestos y servicio</p>
+          <button class="btn btn-primary" (click)="saveEstimate()">
+            💾 Guardar cotización
+          </button>
+        </div>
+
+        <div class="price-breakdown">
+          <h4>Desglose:</h4>
+          <div class="breakdown-item" *ngFor="let item of priceBreakdown()">
+            <span>{{ item.name }}</span>
+            <span>{{ item.price | currency:'USD':'symbol':'1.0-0' }}</span>
+          </div>
+          <div class="breakdown-total">
+            <span>Total estimado</span>
+            <span>{{ calculatedPrice() | currency:'USD':'symbol':'1.0-0' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Galería interactiva con filtros -->
+<section class="gallery-section">
+  <div class="container">
+    <div class="section-header" appReveal>
+      <span class="section-badge">Portafolio</span>
+      <h2>Nuestros <span class="gradient-text">mejores momentos</span></h2>
+    </div>
+
+    <!-- Filtros de categoría -->
+    <div class="gallery-filters" appReveal revealDirection="scale">
+      <button
+        *ngFor="let cat of categories"
+        [class.active]="selectedCategory() === cat"
+        (click)="selectedCategory.set(cat)"
+        class="filter-btn">
+        {{cat}}
+      </button>
+    </div>
+
+    <!-- Grid de galería -->
+    <div class="gallery-grid">
+      <div *ngFor="let img of filteredGallery; let i = index"
+           class="gallery-item"
+           appReveal
+           revealDirection="up"
+           [revealDelay]="i * 100"
+           appTilt
+           [tiltMax]="8"
+           [glare]="true">
+        <img [src]="img.url" [alt]="img.alt" />
+        <div class="gallery-overlay">
+          <span class="gallery-category">{{img.category}}</span>
+          <p>{{img.alt}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonios con slider -->
+<section class="testimonials-section" appReveal>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Testimonios</span>
+      <h2>Lo que dicen nuestros <span class="gradient-text">clientes</span></h2>
+    </div>
+
+    <div class="testimonials-slider">
+      <button class="slider-btn prev" (click)="prevTestimonial()" aria-label="Anterior">
+        ‹
+      </button>
+
+      <div class="testimonial-card">
+        <div class="testimonial-content">
+          <div class="stars">
+            <span *ngFor="let star of [1,2,3,4,5]" class="star">⭐</span>
+          </div>
+          <p class="testimonial-text">"{{testimonials[currentTestimonial()].text}}"</p>
+          <div class="testimonial-author">
+            <img [src]="testimonials[currentTestimonial()].image"
+                 [alt]="testimonials[currentTestimonial()].name"
+                 class="author-img" />
+            <div>
+              <strong>{{testimonials[currentTestimonial()].name}}</strong>
+              <span>{{testimonials[currentTestimonial()].event}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="slider-btn next" (click)="nextTestimonial()" aria-label="Siguiente">
+        ›
+      </button>
+
+      <!-- Indicadores -->
+      <div class="slider-dots">
+        <button
+          *ngFor="let t of testimonials; let i = index"
+          [class.active]="currentTestimonial() === i"
+          (click)="currentTestimonial.set(i)"
+          class="dot"
+          [attr.aria-label]="'Ver testimonio ' + (i + 1)">
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Integración con Redes Sociales -->
+<section class="social-proof-section" appReveal>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">En Redes</span>
+      <h2>Síguenos en <span class="gradient-text">TikTok & Instagram</span></h2>
+      <p class="section-subtitle">
+        Descubre detrás de cámaras, momentos especiales y tips para tu evento
+      </p>
+    </div>
+
+    <div class="social-grid">
+      <div class="social-card" *ngFor="let post of socialPosts; let i = index"
+           appReveal revealDirection="up" [revealDelay]="i * 100">
+        <img [src]="post.image" [alt]="post.caption">
+        <div class="social-overlay">
+          <div class="social-stats">
+            <span>❤️ {{ post.likes }}</span>
+            <span>💬 {{ post.comments }}</span>
+          </div>
+          <p>{{ post.caption }}</p>
+        </div>
+        <div class="social-badge">{{ post.platform }}</div>
+      </div>
+    </div>
+
+    <div class="social-cta" appReveal revealDirection="up" [revealDelay]="400">
+      <a href="https://instagram.com/tuempresa" target="_blank" class="btn btn-outline">
+        📱 Seguir en Instagram
+      </a>
+      <a href="https://tiktok.com/@tuempresa" target="_blank" class="btn btn-outline">
+        🎵 Seguir en TikTok
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Mapa Interactivo de Eventos -->
+<section class="events-map-section" appReveal>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Ubicaciones</span>
+      <h2>Eventos <span class="gradient-text">en Tiempo Real</span></h2>
+      <p class="section-subtitle">
+        Más de 500 eventos realizados en las mejores locaciones
+      </p>
+    </div>
+
+    <div class="map-container">
+      <div class="map-sidebar">
+        <h3>Próximos Eventos</h3>
+        <div class="event-list">
+          <div *ngFor="let event of upcomingEvents" class="event-item">
+            <span class="event-date">{{ event.date }}</span>
+            <strong>{{ event.name }}</strong>
+            <span class="event-location">📍 {{ event.location }}</span>
+            <span class="event-type">{{ event.type }}</span>
+          </div>
+        </div>
+
+        <div class="map-stats">
+          <div class="stat">
+            <strong>500+</strong>
+            <span>Eventos realizados</span>
+          </div>
+          <div class="stat">
+            <strong>50+</strong>
+            <span>Locaciones premium</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-visual">
+        <div class="mock-map">
+          <div class="map-background"></div>
+          <div *ngFor="let marker of eventMarkers"
+               class="map-marker"
+               [style.left]="marker.x + '%'"
+               [style.top]="marker.y + '%'"
+               [class]="'marker-' + marker.type">
+            <div class="marker-pulse"></div>
+            <span class="marker-icon">{{ marker.icon }}</span>
+            <div class="marker-tooltip">
+              <strong>{{ marker.event }}</strong>
+              <span>{{ marker.date }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Final con efecto -->
+<section class="cta-section" appReveal>
+  <div class="cta-content">
+    <div class="cta-icon">🎉</div>
+    <h2>¿Listo para crear un evento inolvidable?</h2>
+    <p>Contáctanos hoy y recibe una cotización personalizada sin compromiso</p>
+    <div class="cta-buttons">
+      <button (click)="openContactModal()" class="btn btn-large btn-white pulse">
+        Solicitar cotización gratis
+      </button>
+      <button (click)="toggleChatbot()" class="btn btn-outline">
+        🤖 Chat en vivo
+      </button>
+    </div>
+  </div>
+  <div class="floating-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+</section>
+
+<!-- Chatbot Integrado -->
+<div class="chatbot-widget" [class.active]="chatbotOpen()">
+  <div class="chatbot-header" (click)="toggleChatbot()">
+    <span>🤖 Asistente Virtual</span>
+    <span class="chatbot-toggle">{{ chatbotOpen() ? '−' : '+' }}</span>
+    <span class="chatbot-status" [class.online]="isOnline">●</span>
+  </div>
+
+  <div class="chatbot-messages" #chatbotMessages>
+    <div *ngFor="let msg of chatMessages"
+         [class]="'chat-message ' + msg.type">
+      <div class="message-bubble">
+        {{ msg.text }}
+        <span class="message-time">{{ msg.timestamp | date:'HH:mm' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="chatbot-input" *ngIf="chatbotOpen()">
+    <input
+      type="text"
+      [(ngModel)]="chatInput"
+      placeholder="Escribe tu pregunta sobre eventos..."
+      (keyup.enter)="sendChatMessage()"
+      #chatInputElement>
+    <button (click)="sendChatMessage()" class="send-btn">➤</button>
+  </div>
+
+  <div class="chatbot-quick-actions" *ngIf="chatbotOpen()">
+    <button class="quick-action" (click)="quickAction('precios')">
+      💰 Ver precios
+    </button>
+    <button class="quick-action" (click)="quickAction('disponibilidad')">
+      📅 Consultar disponibilidad
+    </button>
+    <button class="quick-action" (click)="quickAction('contacto')">
+      📞 Contactar asesor
+    </button>
+  </div>
+</div>
+
+<!-- Modal de contacto -->
+<div class="modal-overlay" *ngIf="showContactModal()" (click)="closeContactModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()"
+       [@modalAnimation]>
+
+    <button class="modal-close" (click)="closeContactModal()" aria-label="Cerrar">×</button>
+
+    <div class="modal-header">
+      <h3>📩 Cotiza tu evento</h3>
+      <p>Completa el formulario y te contactaremos en minutos</p>
+    </div>
+
+    <form *ngIf="!formSubmitted()" class="contact-form" (ngSubmit)="submitQuickContact()">
+      <div class="form-group">
+        <label for="name">Nombre completo *</label>
+        <input
+          type="text"
+          id="name"
+          [(ngModel)]="quickContact.name"
+          name="name"
+          placeholder="Tu nombre"
+          required />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="phone">Teléfono *</label>
+          <input
+            type="tel"
+            id="phone"
+            [(ngModel)]="quickContact.phone"
+            name="phone"
+            placeholder="+57 300 123 4567"
+            required />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            [(ngModel)]="quickContact.email"
+            name="email"
+            placeholder="tu@email.com" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="eventType">Tipo de evento *</label>
+        <select
+          id="eventType"
+          [(ngModel)]="quickContact.eventType"
+          name="eventType"
+          required>
+          <option value="">Selecciona una opción</option>
+          <option value="Boda">💍 Boda</option>
+          <option value="Corporativo">🏢 Evento Corporativo</option>
+          <option value="Cumpleaños">🎂 Cumpleaños</option>
+          <option value="Quinceañera">👑 Quinceañera</option>
+          <option value="Baby Shower">👶 Baby Shower</option>
+          <option value="Graduación">🎓 Graduación</option>
+          <option value="Otro">🎉 Otro</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="date">Fecha del evento</label>
+          <input
+            type="date"
+            id="date"
+            [(ngModel)]="quickContact.date"
+            name="date"
+            [min]="minDate" />
+        </div>
+
+        <div class="form-group">
+          <label for="guests">Número de invitados</label>
+          <input
+            type="number"
+            id="guests"
+            [(ngModel)]="quickContact.guests"
+            name="guests"
+            placeholder="ej: 100"
+            min="20"
+            max="1000" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="budget">Presupuesto aproximado</label>
+        <select
+          id="budget"
+          [(ngModel)]="quickContact.budget"
+          name="budget">
+          <option value="">Selecciona un rango</option>
+          <option value="1000-3000">$1,000 - $3,000 USD</option>
+          <option value="3000-5000">$3,000 - $5,000 USD</option>
+          <option value="5000-10000">$5,000 - $10,000 USD</option>
+          <option value="10000+">Más de $10,000 USD</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Mensaje adicional</label>
+        <textarea
+          id="message"
+          [(ngModel)]="quickContact.message"
+          name="message"
+          placeholder="Cuéntanos más sobre tu evento..."
+          rows="3"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full" [disabled]="isSubmitting">
+        <span *ngIf="isSubmitting" class="loading-spinner"></span>
+        {{ isSubmitting ? 'Enviando...' : 'Enviar por WhatsApp & Email' }}
+      </button>
+
+      <p class="form-note">
+        * Campos obligatorios. Al enviar aceptas nuestros términos y condiciones.
+      </p>
+    </form>
+
+    <!-- Mensaje de éxito -->
+    <div *ngIf="formSubmitted()" class="success-message">
+      <div class="success-icon">✓</div>
+      <h4>¡Solicitud enviada!</h4>
+      <p>Te contactaremos muy pronto por WhatsApp y email</p>
+      <div class="success-actions">
+        <button class="btn btn-outline" (click)="closeContactModal()">
+          Cerrar
+        </button>
+        <button class="btn btn-primary" (click)="openWhatsApp()">
+          Abrir WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

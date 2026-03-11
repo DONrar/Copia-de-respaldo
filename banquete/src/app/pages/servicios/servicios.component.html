@@ -1,0 +1,563 @@
+<!-- Hero de Servicios con Video Background -->
+<section class="services-hero">
+  <!-- Video Background -->
+  <div class="video-background">
+    <video autoplay muted loop playsinline>
+      <source src="assets/videos/services-hero.mp4" type="video/mp4">
+      <source src="assets/videos/services-hero.webm" type="video/webm">
+      <!-- Fallback image -->
+      <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070" alt="Services background">
+    </video>
+    <div class="video-overlay"></div>
+  </div>
+
+  <div class="container">
+    <div class="hero-content" appReveal revealDirection="up">
+      <span class="badge">🎯 Nuestros Servicios</span>
+      <h1>
+        Todo lo que necesitas para tu
+        <span class="gradient-text">evento perfecto</span>
+      </h1>
+      <p class="lead">
+        Catering integral, decoración personalizada, ambientación única, logística
+        impecable y mucho más. Servicios premium que transforman momentos en recuerdos eternos.
+      </p>
+
+      <div class="hero-stats">
+        <div class="stat" appReveal revealDirection="scale" [revealDelay]="100">
+          <span class="stat-number">15+</span>
+          <span class="stat-label">Servicios</span>
+        </div>
+        <div class="stat" appReveal revealDirection="scale" [revealDelay]="200">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Personalizable</span>
+        </div>
+        <div class="stat" appReveal revealDirection="scale" [revealDelay]="300">
+          <span class="stat-number">24/7</span>
+          <span class="stat-label">Soporte</span>
+        </div>
+      </div>
+
+      <!-- Chatbot Quick Access -->
+      <div class="hero-chat-cta" appReveal revealDirection="up" [revealDelay]="400">
+        <button class="btn btn-outline-white" (click)="toggleChatbot()">
+          🤖 Consulta rápida con nuestro asistente
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll down indicator -->
+  <div class="scroll-arrow" appReveal revealDirection="down" [revealDelay]="500">
+    <span>Explorar servicios</span>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="currentColor" stroke-width="2"/>
+    </svg>
+  </div>
+</section>
+
+<!-- Calculadora de Servicios -->
+<section class="services-calculator" appReveal>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">💰 Calculadora</span>
+      <h2>Presupuesto <span class="gradient-text">instantáneo</span></h2>
+      <p>Combina servicios y obtén una cotización en tiempo real</p>
+    </div>
+
+    <div class="calculator-container">
+      <div class="calculator-sidebar">
+        <h3>Selecciona servicios</h3>
+        <div class="service-selector">
+          <div *ngFor="let service of services" class="service-option">
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                [checked]="isServiceSelected(service.id)"
+                (change)="toggleServiceSelection(service.id)">
+              <span class="checkmark"></span>
+              <span class="service-info">
+                <span class="service-icon">{{service.icon}}</span>
+                <span class="service-name">{{service.title}}</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="calculator-summary">
+          <h4>Resumen seleccionado:</h4>
+          <div class="selected-services">
+            <div *ngFor="let selected of getSelectedServices()" class="selected-item">
+              <span>{{selected.icon}} {{selected.title}}</span>
+              <span class="service-price">{{getServicePrice(selected.id) | currency:'USD':'symbol':'1.0-0'}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="calculator-results">
+        <div class="result-card">
+          <h3>Total estimado</h3>
+          <div class="total-price">{{getTotalPrice() | currency:'USD':'symbol':'1.0-0'}}</div>
+          <p class="price-note">* Precio base. Contacta para cotización exacta</p>
+
+          <div class="price-breakdown">
+            <h4>Desglose:</h4>
+            <div class="breakdown-item" *ngFor="let item of getPriceBreakdown()">
+              <span>{{item.name}}</span>
+              <span>{{item.price | currency:'USD':'symbol':'1.0-0'}}</span>
+            </div>
+          </div>
+
+          <div class="calculator-actions">
+            <button class="btn btn-primary" (click)="saveCalculatorEstimate()">
+              💾 Guardar cotización
+            </button>
+            <button class="btn btn-outline" (click)="openContactWithEstimate()">
+              💬 Contactar con este presupuesto
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Grid de Servicios Principal -->
+<section class="services-grid-section">
+  <div class="container">
+
+    <!-- Intro -->
+    <div class="section-intro" appReveal>
+      <h2>Servicios <span class="highlight">premium</span> para cada ocasión</h2>
+      <p>Selecciona un servicio para conocer todos los detalles</p>
+    </div>
+
+    <!-- Grid de Cards -->
+    <div class="services-grid">
+      <article
+        *ngFor="let service of services; let i = index"
+        class="service-card"
+        [class.selected]="selectedService() === service.id"
+        [class.popular]="service.popular"
+        (click)="selectService(service.id)"
+        (mouseenter)="onCardHover(service.id)"
+        (mouseleave)="onCardHover(null)"
+        appReveal
+        revealDirection="up"
+        [revealDelay]="i * 100"
+        appTilt
+        [tiltMax]="6"
+        [tiltScale]="1.02">
+
+        <!-- Badge popular -->
+        <div class="popular-badge" *ngIf="service.popular">
+          <span>⭐ Más solicitado</span>
+        </div>
+
+        <!-- Background gradient -->
+        <div class="card-gradient" [style.background]="service.gradient"></div>
+
+        <!-- Imagen de fondo -->
+        <div class="card-bg-image" [style.backgroundImage]="'url(' + service.image + ')'"></div>
+
+        <!-- Contenido -->
+        <div class="card-content">
+          <div class="card-icon">
+            <span>{{service.icon}}</span>
+          </div>
+
+          <h3>{{service.title}}</h3>
+          <p class="card-description">{{service.description}}</p>
+
+          <div class="card-price">
+            <span class="price-tag">Desde {{getServicePrice(service.id) | currency:'USD':'symbol':'1.0-0'}}</span>
+          </div>
+
+          <div class="card-footer">
+            <span class="view-details">
+              Ver detalles
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        <!-- Hover effect overlay -->
+        <div class="card-hover-overlay"></div>
+      </article>
+    </div>
+
+    <!-- Panel de detalles expandido -->
+    <div
+      class="service-detail-panel"
+      *ngIf="selectedService()"
+      [@expandCollapse]>
+
+      <button class="close-btn" (click)="selectService('')" aria-label="Cerrar">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+
+      <div class="detail-content">
+        <div class="detail-image">
+          <img [src]="getSelectedServiceData()?.image" [alt]="getSelectedServiceData()?.title" />
+          <div class="image-overlay"></div>
+          <div class="detail-price">
+            Desde {{getServicePrice(getSelectedServiceData()?.id || '') | currency:'USD':'symbol':'1.0-0'}}
+          </div>
+        </div>
+
+        <div class="detail-info">
+          <span class="detail-icon">{{getSelectedServiceData()?.icon}}</span>
+          <h3>{{getSelectedServiceData()?.title}}</h3>
+          <p class="detail-description">{{getSelectedServiceData()?.description}}</p>
+
+          <div class="features-grid">
+            <h4>✨ Incluye:</h4>
+            <ul class="features-list">
+              <li *ngFor="let feature of getSelectedServiceData()?.features">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 13L9 17L19 7" stroke="#4ade80" stroke-width="2"/>
+                </svg>
+                {{feature}}
+              </li>
+            </ul>
+          </div>
+
+          <div class="service-metrics">
+            <div class="metric">
+              <span class="metric-value">2-4</span>
+              <span class="metric-label">Semanas de anticipación</span>
+            </div>
+            <div class="metric">
+              <span class="metric-value">98%</span>
+              <span class="metric-label">Clientes satisfechos</span>
+            </div>
+            <div class="metric">
+              <span class="metric-value">24/7</span>
+              <span class="metric-label">Soporte incluido</span>
+            </div>
+          </div>
+
+          <div class="detail-actions">
+            <button class="btn btn-primary" (click)="addToCalculator(getSelectedServiceData()?.id || '')">
+              <span>➕</span> Agregar a calculadora
+            </button>
+            <button class="btn btn-secondary" routerLink="/contacto" [queryParams]="{service: getSelectedServiceData()?.id}">
+              <span>💬</span> Cotizar este servicio
+            </button>
+            <button class="btn btn-outline" (click)="toggleChatbot()">
+              <span>🤖</span> Consultar con asistente
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Nuestro Proceso -->
+<section class="process-section">
+  <div class="container">
+    <div class="section-header" appReveal>
+      <span class="section-badge">📍 Cómo trabajamos</span>
+      <h2>Un proceso simple y <span class="gradient-text">transparente</span></h2>
+      <p>De la idea a la realidad en 4 pasos</p>
+    </div>
+
+    <div class="process-timeline">
+      <div
+        *ngFor="let step of process; let i = index"
+        class="process-step"
+        appReveal
+        revealDirection="up"
+        [revealDelay]="i * 150">
+
+        <div class="step-number">
+          <span>{{step.step}}</span>
+        </div>
+
+        <div class="step-content">
+          <div class="step-icon">{{step.icon}}</div>
+          <h4>{{step.title}}</h4>
+          <p>{{step.description}}</p>
+        </div>
+
+        <div class="step-connector" *ngIf="i < process.length - 1"></div>
+      </div>
+    </div>
+
+    <!-- Proceso Interactivo -->
+    <div class="interactive-process" appReveal revealDirection="up" [revealDelay]="600">
+      <h3>¿Por dónde quieres empezar?</h3>
+      <div class="process-options">
+        <button class="process-option" (click)="startWithService('catering')">
+          <span class="option-icon">🍽️</span>
+          <span class="option-text">Empezar por el catering</span>
+        </button>
+        <button class="process-option" (click)="startWithService('decoracion')">
+          <span class="option-icon">🎨</span>
+          <span class="option-text">Empezar por la decoración</span>
+        </button>
+        <button class="process-option" (click)="startWithService('logistica')">
+          <span class="option-icon">⚡</span>
+          <span class="option-text">Empezar por la logística</span>
+        </button>
+        <button class="process-option" (click)="toggleChatbot()">
+          <span class="option-icon">🤖</span>
+          <span class="option-text">Que me ayude el asistente</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Servicios Adicionales -->
+<section class="addons-section">
+  <div class="container">
+    <div class="section-header" appReveal>
+      <span class="section-badge">➕ Extras</span>
+      <h2>Complementa tu <span class="gradient-text">experiencia</span></h2>
+      <p>Servicios adicionales para hacer tu evento aún más especial</p>
+    </div>
+
+    <div class="addons-grid">
+      <div
+        *ngFor="let addon of addons; let i = index"
+        class="addon-card"
+        appReveal
+        revealDirection="scale"
+        [revealDelay]="i * 80"
+        appTilt
+        [tiltMax]="4">
+
+        <div class="addon-icon">{{addon.icon}}</div>
+        <h4>{{addon.name}}</h4>
+        <p>{{addon.description}}</p>
+        <div class="addon-price">{{addon.price}}</div>
+        <button class="btn btn-sm btn-outline" (click)="addAddonToCalculator(addon)">
+          ➕ Agregar
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonios de Servicios -->
+<section class="services-testimonials" appReveal>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">💫 Experiencias</span>
+      <h2>Lo que dicen de nuestros <span class="gradient-text">servicios</span></h2>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card" *ngFor="let testimonial of serviceTestimonials" appReveal revealDirection="up">
+        <div class="testimonial-content">
+          <div class="service-badge">{{testimonial.service}}</div>
+          <div class="stars">
+            <span *ngFor="let star of [1,2,3,4,5]" class="star">⭐</span>
+          </div>
+          <p class="testimonial-text">"{{testimonial.text}}"</p>
+          <div class="testimonial-author">
+            <strong>{{testimonial.author}}</strong>
+            <span>{{testimonial.event}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="services-cta" appReveal>
+  <div class="cta-background"></div>
+  <div class="container">
+    <div class="cta-content">
+      <span class="cta-icon">🎉</span>
+      <h2>¿Listo para crear algo extraordinario?</h2>
+      <p>Contáctanos y diseñemos juntos el evento de tus sueños</p>
+
+      <div class="cta-buttons">
+        <button class="btn btn-large btn-white" (click)="openContactModal()">
+          Solicitar cotización completa
+        </button>
+        <button class="btn btn-large btn-outline-white" (click)="toggleChatbot()">
+          🤖 Consulta rápida con IA
+        </button>
+        <button class="btn btn-large btn-outline-white" routerLink="/paquetes">
+          Ver paquetes completos
+        </button>
+      </div>
+
+      <div class="cta-features">
+        <div class="feature-item">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span>Cotización sin compromiso</span>
+        </div>
+        <div class="feature-item">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span>Respuesta en 24 horas</span>
+        </div>
+        <div class="feature-item">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span>Asesoría personalizada</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating elements -->
+  <div class="floating-elements">
+    <div class="float-element element-1"></div>
+    <div class="float-element element-2"></div>
+    <div class="float-element element-3"></div>
+  </div>
+</section>
+
+<!-- FAQ Rápidas -->
+<section class="quick-faq">
+  <div class="container">
+    <div class="section-header" appReveal>
+      <h3>Preguntas frecuentes sobre servicios</h3>
+    </div>
+
+    <div class="faq-grid">
+      <div class="faq-item" appReveal revealDirection="up" [revealDelay]="100">
+        <h4>¿Puedo contratar servicios individuales?</h4>
+        <p>Sí, puedes contratar cada servicio por separado o crear un paquete personalizado según tus necesidades específicas.</p>
+      </div>
+      <div class="faq-item" appReveal revealDirection="up" [revealDelay]="200">
+        <h4>¿Incluyen los servicios todos los materiales?</h4>
+        <p>Sí, todos nuestros servicios incluyen materiales premium, personal especializado y equipos necesarios.</p>
+      </div>
+      <div class="faq-item" appReveal revealDirection="up" [revealDelay]="300">
+        <h4>¿Trabajan en cualquier ubicación?</h4>
+        <p>Sí, nos adaptamos a cualquier locación dentro y fuera de la ciudad. Consulta por cobertura en tu área.</p>
+      </div>
+      <div class="faq-item" appReveal revealDirection="up" [revealDelay]="400">
+        <h4>¿Ofrecen paquetes personalizados?</h4>
+        <p>¡Absolutamente! Creamos paquetes a medida combinando los servicios que necesites con descuentos especiales.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Chatbot Integrado -->
+<div class="chatbot-widget" [class.active]="chatbotOpen()">
+  <div class="chatbot-header" (click)="toggleChatbot()">
+    <span>🤖 Asistente de Servicios</span>
+    <span class="chatbot-toggle">{{ chatbotOpen() ? '−' : '+' }}</span>
+    <span class="chatbot-status" [class.online]="isOnline">●</span>
+  </div>
+
+  <div class="chatbot-messages" #chatbotMessages>
+    <div *ngFor="let msg of chatMessages"
+         [class]="'chat-message ' + msg.type">
+      <div class="message-bubble">
+        {{ msg.text }}
+        <span class="message-time">{{ msg.timestamp | date:'HH:mm' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="chatbot-input" *ngIf="chatbotOpen()">
+    <input
+      type="text"
+      [(ngModel)]="chatInput"
+      placeholder="Pregunta sobre nuestros servicios..."
+      (keyup.enter)="sendChatMessage()"
+      #chatInputElement>
+    <button (click)="sendChatMessage()" class="send-btn">➤</button>
+  </div>
+
+  <div class="chatbot-quick-actions" *ngIf="chatbotOpen()">
+    <button class="quick-action" (click)="quickAction('precios')">
+      💰 Consultar precios
+    </button>
+    <button class="quick-action" (click)="quickAction('catering')">
+      🍽️ Información catering
+    </button>
+    <button class="quick-action" (click)="quickAction('paquetes')">
+      📦 Ver paquetes
+    </button>
+  </div>
+</div>
+
+<!-- Modal de Contacto para Servicios -->
+<div class="modal-overlay" *ngIf="showContactModal()" (click)="closeContactModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="closeContactModal()" aria-label="Cerrar">×</button>
+
+    <div class="modal-header">
+      <h3>📩 Cotiza tus servicios</h3>
+      <p>Selecciona los servicios que te interesan</p>
+    </div>
+
+    <form class="contact-form" (ngSubmit)="submitServiceInquiry()">
+      <div class="service-selection">
+        <h4>Servicios seleccionados:</h4>
+        <div class="selected-services-list">
+          <div *ngFor="let service of getSelectedServicesForModal()" class="selected-service-item">
+            <span>{{service.icon}} {{service.title}}</span>
+            <button type="button" class="remove-service" (click)="removeServiceFromModal(service.id)">×</button>
+          </div>
+          <div *ngIf="getSelectedServicesForModal().length === 0" class="no-services">
+            Ningún servicio seleccionado
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Nombre completo *</label>
+        <input type="text" id="name" [(ngModel)]="serviceInquiry.name" name="name" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="phone">Teléfono *</label>
+          <input type="tel" id="phone" [(ngModel)]="serviceInquiry.phone" name="phone" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" [(ngModel)]="serviceInquiry.email" name="email">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="eventDate">Fecha aproximada del evento</label>
+        <input type="date" id="eventDate" [(ngModel)]="serviceInquiry.eventDate" name="eventDate">
+      </div>
+
+      <div class="form-group">
+        <label for="budget">Presupuesto estimado</label>
+        <select id="budget" [(ngModel)]="serviceInquiry.budget" name="budget">
+          <option value="">Selecciona un rango</option>
+          <option value="1000-3000">$1,000 - $3,000 USD</option>
+          <option value="3000-5000">$3,000 - $5,000 USD</option>
+          <option value="5000-10000">$5,000 - $10,000 USD</option>
+          <option value="10000+">Más de $10,000 USD</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Detalles adicionales</label>
+        <textarea id="message" [(ngModel)]="serviceInquiry.message" name="message"
+                  placeholder="Cuéntanos más sobre tu evento..."></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full">
+        Enviar solicitud de cotización
+      </button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,388 @@
+
+    <section class="contact-hero" appReveal>
+      <div class="hero-bg"></div>
+      <div class="container">
+        <div class="hero-content">
+          <span class="section-badge" @scaleIn>📞 Contáctanos</span>
+          <h1 @fadeInUp>
+            Hablemos de tu <span class="gradient-text">evento soñado</span>
+          </h1>
+          <p class="hero-subtitle" @fadeInUp>
+            Estamos aquí para hacer realidad tu visión. Nuestro equipo está listo para ayudarte en cada paso del camino.
+          </p>
+        </div>
+
+        <div class="quick-stats" appReveal revealDirection="scale" [revealDelay]="200">
+          <div class="stat-card" *ngFor="let stat of stats; let i = index"
+               appTilt [tiltMax]="8" [tiltScale]="1.02"
+               [style.animation-delay]="i * 100 + 'ms'">
+            <div class="stat-icon">{{ stat.icon }}</div>
+            <strong>{{ stat.value }}</strong>
+            <span>{{ stat.label }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-methods" appReveal>
+      <div class="container">
+        <h2 class="section-title">Elige tu canal favorito</h2>
+
+        <div class="methods-grid">
+          @for (method of contactMethods; track method.id; let idx = $index) {
+            <article
+              class="method-card"
+              appTilt [tiltMax]="10" [tiltScale]="1.02" [glare]="true"
+              appReveal revealDirection="up" [revealDelay]="idx * 100"
+              (click)="method.action()"
+              @fadeInUp>
+
+              <div class="method-header" [style.background]="method.gradient">
+                <div class="method-icon">{{ method.icon }}</div>
+              </div>
+
+              <div class="method-body">
+                <h3>{{ method.title }}</h3>
+                <p>{{ method.subtitle }}</p>
+                <div class="method-value">{{ method.value }}</div>
+              </div>
+
+              <button class="method-cta" [style.border-color]="method.color">
+                Contactar ahora
+              </button>
+            </article>
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-form-section">
+      <div class="container">
+        <div class="form-wrapper">
+          <div class="form-column" appReveal revealDirection="left">
+            <div class="form-header">
+              <h2>Envíanos un mensaje</h2>
+              <p>Completa el formulario y te responderemos en menos de 24 horas</p>
+            </div>
+
+            @if (!formSubmitted()) {
+              <form class="contact-form" (ngSubmit)="submitForm()" #contactForm="ngForm">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="nombre">
+                      <span class="label-icon">👤</span>
+                      Nombre completo *
+                    </label>
+                    <input
+                      type="text"
+                      id="nombre"
+                      [(ngModel)]="formData.nombre"
+                      name="nombre"
+                      placeholder="Tu nombre"
+                      required
+                      #nombreInput="ngModel"
+                      [class.error]="nombreInput.invalid && nombreInput.touched">
+                    @if (nombreInput.invalid && nombreInput.touched) {
+                      <span class="error-message">El nombre es obligatorio</span>
+                    }
+                  </div>
+
+                  <div class="form-group">
+                    <label for="telefono">
+                      <span class="label-icon">📱</span>
+                      Teléfono *
+                    </label>
+                    <input
+                      type="tel"
+                      id="telefono"
+                      [(ngModel)]="formData.telefono"
+                      name="telefono"
+                      placeholder="+57 300 123 4567"
+                      required
+                      #telefonoInput="ngModel"
+                      [class.error]="telefonoInput.invalid && telefonoInput.touched">
+                    @if (telefonoInput.invalid && telefonoInput.touched) {
+                      <span class="error-message">El teléfono es obligatorio</span>
+                    }
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="email">
+                    <span class="label-icon">📧</span>
+                    Correo electrónico *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    [(ngModel)]="formData.email"
+                    name="email"
+                    placeholder="tu@correo.com"
+                    required
+                    email
+                    #emailInput="ngModel"
+                    [class.error]="emailInput.invalid && emailInput.touched">
+                  @if (emailInput.invalid && emailInput.touched) {
+                    <span class="error-message">
+                      {{ emailInput.errors?.['required'] ? 'El email es obligatorio' : 'Email inválido' }}
+                    </span>
+                  }
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="eventType">
+                      <span class="label-icon">🎉</span>
+                      Tipo de evento
+                    </label>
+                    <select
+                      id="eventType"
+                      [(ngModel)]="formData.tipoEvento"
+                      name="eventType">
+                      <option value="">Selecciona una opción</option>
+                      <option value="Boda">💍 Boda</option>
+                      <option value="Corporativo">🏢 Evento Corporativo</option>
+                      <option value="Cumpleaños">🎂 Cumpleaños</option>
+                      <option value="Quinceañera">👑 Quinceañera</option>
+                      <option value="Baby Shower">👶 Baby Shower</option>
+                      <option value="Graduación">🎓 Graduación</option>
+                      <option value="Otro">🎊 Otro</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="eventDate">
+                      <span class="label-icon">📅</span>
+                      Fecha aproximada
+                    </label>
+                    <input
+                      type="date"
+                      id="eventDate"
+                      [(ngModel)]="formData.fecha"
+                      name="eventDate"
+                      [min]="minDate">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="guests">
+                    <span class="label-icon">👥</span>
+                    Número de invitados
+                    <span class="guest-badge">{{ formData.invitados }}</span>
+                  </label>
+                  <input
+                    type="range"
+                    id="guests"
+                    min="20"
+                    max="500"
+                    step="10"
+                    [(ngModel)]="formData.invitados"
+                    name="guests"
+                    class="range-slider">
+                  <div class="range-labels">
+                    <span>20</span>
+                    <span>500+</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="mensaje">
+                    <span class="label-icon">💬</span>
+                    Cuéntanos sobre tu evento *
+                  </label>
+                  <textarea
+                    id="mensaje"
+                    [(ngModel)]="formData.mensaje"
+                    name="mensaje"
+                    rows="5"
+                    placeholder="Describe tu visión, ideas especiales, requisitos específicos..."
+                    required
+                    #mensajeInput="ngModel"
+                    [class.error]="mensajeInput.invalid && mensajeInput.touched"></textarea>
+                  @if (mensajeInput.invalid && mensajeInput.touched) {
+                    <span class="error-message">El mensaje es obligatorio</span>
+                  }
+                  <div class="char-counter">
+                    {{ formData.mensaje.length }}/500 caracteres
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button
+                    type="button"
+                    class="btn btn-whatsapp"
+                    (click)="sendViaWhatsApp()"
+                    [disabled]="isSubmitting">
+                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    <span>{{ isSubmitting ? 'Enviando...' : 'Enviar por WhatsApp' }}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn btn-email"
+                    (click)="sendViaEmail()"
+                    [disabled]="isSubmitting">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    <span>Enviar por Email</span>
+                  </button>
+                </div>
+
+                <p class="form-note">
+                  * Campos obligatorios. Tus datos están seguros con nosotros.
+                </p>
+              </form>
+            } @else {
+              <div class="success-state" @scaleIn>
+                <div class="success-icon">✓</div>
+                <h3>¡Mensaje enviado exitosamente!</h3>
+                <p>Gracias por contactarnos. Te responderemos muy pronto.</p>
+                <div class="success-actions">
+                  <button class="btn btn-primary" (click)="resetForm()">
+                    Enviar otro mensaje
+                  </button>
+                  <a routerLink="/" class="btn btn-outline">
+                    Volver al inicio
+                  </a>
+                </div>
+              </div>
+            }
+          </div>
+ 
+          <div class="info-column" appReveal revealDirection="right">
+            <div class="info-card" appTilt [tiltMax]="5">
+              <h3>¿Por qué elegirnos?</h3>
+              <ul class="benefits-list">
+                <li>
+                  <span class="benefit-icon">⚡</span>
+                  <div>
+                    <strong>Respuesta rápida</strong>
+                    <span>Te contactamos en menos de 24 horas</span>
+                  </div>
+                </li>
+                <li>
+                  <span class="benefit-icon">🎨</span>
+                  <div>
+                    <strong>Diseño personalizado</strong>
+                    <span>Cada evento es único y especial</span>
+                  </div>
+                </li>
+                <li>
+                  <span class="benefit-icon">💎</span>
+                  <div>
+                    <strong>Calidad premium</strong>
+                    <span>Los mejores proveedores y servicios</span>
+                  </div>
+                </li>
+                <li>
+                  <span class="benefit-icon">🤝</span>
+                  <div>
+                    <strong>Atención 24/7</strong>
+                    <span>Disponibles cuando nos necesites</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="info-card testimonial-card" appTilt [tiltMax]="5">
+              <div class="testimonial-header">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+              </div>
+              <p class="testimonial-text">
+                "Increíble experiencia. Superaron todas nuestras expectativas y crearon el evento de nuestros sueños."
+              </p>
+              <div class="testimonial-author">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop" alt="Cliente">
+                <div>
+                  <strong>María González</strong>
+                  <span>Boda 2024</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card hours-card" appTilt [tiltMax]="5">
+              <h3>Horarios de atención</h3>
+              <div class="hours-list">
+                <div class="hours-item">
+                  <span>Lunes - Viernes</span>
+                  <strong>9:00 AM - 7:00 PM</strong>
+                </div>
+                <div class="hours-item">
+                  <span>Sábados</span>
+                  <strong>10:00 AM - 6:00 PM</strong>
+                </div>
+                <div class="hours-item">
+                  <span>Domingos</span>
+                  <strong>Cita previa</strong>
+                </div>
+              </div>
+              <div class="hours-note">
+                <span class="online-dot"></span>
+                Disponibles ahora
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="map-section" appReveal>
+      <div class="container">
+        <div class="map-wrapper">
+          <div class="map-info">
+            <h3>📍 Visítanos</h3>
+            <p class="address">
+              <strong>Oficina Principal</strong><br>
+              Calle 123 #45-67<br>
+              Bogotá D.C., Colombia
+            </p>
+            <a href="https://maps.google.com" target="_blank" class="btn btn-outline">
+              Abrir en Google Maps
+            </a>
+          </div>
+          <div class="map-placeholder">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127262.54544361205!2d-74.14640985!3d4.6482837!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9bfd2da6cb29%3A0x239d635520a33914!2zQm9nb3TDoSwgQm9nb3Rh!5e0!3m2!1sen!2sco!4v1234567890"
+              width="100%"
+              height="100%"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" appReveal>
+      <div class="container">
+        <h2 class="section-title">Preguntas Frecuentes</h2>
+        <div class="faq-grid">
+          @for (faq of faqs; track faq.question; let i = $index) {
+            <div
+              class="faq-item"
+              [class.active]="activeFaq() === i"
+              (click)="toggleFaq(i)"
+              appReveal
+              revealDirection="up"
+              [revealDelay]="i * 100">
+              <div class="faq-question">
+                <span>{{ faq.question }}</span>
+                <span class="faq-icon">{{ activeFaq() === i ? '−' : '+' }}</span>
+              </div>
+              @if (activeFaq() === i) {
+                <div class="faq-answer" @fadeInUp>
+                  {{ faq.answer }}
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </section>

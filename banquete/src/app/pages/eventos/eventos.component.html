@@ -1,0 +1,578 @@
+<!-- Header Section con Video Background -->
+<section class="events-header">
+  <!-- Video Background -->
+  <div class="video-background">
+    <video autoplay muted loop playsinline>
+      <source src="assets/videos/events-hero.mp4" type="video/mp4">
+      <source src="assets/videos/events-hero.webm" type="video/webm">
+      <!-- Fallback image -->
+      <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070" alt="Events background">
+    </video>
+    <div class="video-overlay"></div>
+  </div>
+
+  <div class="container">
+    <div class="header-content" appReveal revealDirection="up">
+      <span class="badge">📸 Portafolio</span>
+      <h2>Eventos <span class="gradient-text">recientes</span></h2>
+      <p class="lead">
+        Cada evento es una historia única. Explora nuestros trabajos más recientes
+        y descubre cómo transformamos sueños en realidad.
+      </p>
+    </div>
+
+    <!-- Stats rápidas -->
+    <div class="header-stats" appReveal revealDirection="scale" [revealDelay]="100">
+      <div class="stat">
+        <strong>{{events.length}}+</strong>
+        <span>Eventos realizados</span>
+      </div>
+      <div class="stat">
+        <strong>100%</strong>
+        <span>Clientes satisfechos</span>
+      </div>
+      <div class="stat">
+        <strong>15+</strong>
+        <span>Categorías</span>
+      </div>
+    </div>
+
+    <!-- Filtros de categoría -->
+    <div class="category-filters" appReveal revealDirection="scale" [revealDelay]="200">
+      <button
+        *ngFor="let cat of categories"
+        [class.active]="selectedCategory() === cat"
+        (click)="filterByCategory(cat)"
+        class="filter-btn">
+        <span *ngIf="cat !== 'Todos'">{{getCategoryIcon(cat)}}</span>
+        {{cat}}
+        <span class="filter-count" *ngIf="cat !== 'Todos'">
+          ({{getCategoryCount(cat)}})
+        </span>
+      </button>
+    </div>
+
+    <!-- Search y View Toggle -->
+    <div class="header-controls" appReveal revealDirection="down" [revealDelay]="300">
+      <div class="search-box">
+  <input
+    type="text"
+    [value]="searchQuery"
+    (input)="searchQuery = $any($event.target).value; onSearchChange()"
+    placeholder="🔍 Buscar eventos...">
+</div>
+      <div class="view-toggle">
+        <button
+          [class.active]="viewMode() === 'grid'"
+          (click)="viewMode.set('grid')"
+          class="view-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+            <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+            <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+            <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+        <button
+          [class.active]="viewMode() === 'list'"
+          (click)="viewMode.set('list')"
+          class="view-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Indicador de scroll -->
+    <div class="scroll-hint" appReveal revealDirection="down" [revealDelay]="400">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      <span>Explora nuestros eventos</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- Horizontal Scroll Section -->
+<section class="h-scroll-section" aria-label="Galería de eventos recientes" [class.list-view]="viewMode() === 'list'">
+
+  <!-- Navigation Buttons -->
+  <button
+    *ngIf="canScrollLeft() && viewMode() === 'grid'"
+    class="nav-btn nav-left"
+    (click)="scrollLeft()"
+    aria-label="Ver eventos anteriores"
+    [@fadeSlide]>
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+      <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <button
+    *ngIf="canScrollRight() && viewMode() === 'grid'"
+    class="nav-btn nav-right"
+    (click)="scrollRight()"
+    aria-label="Ver más eventos"
+    [@fadeSlide]>
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+      <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <!-- Scroll Container -->
+  <div class="scroll-container" #scrollContainer (scroll)="onScroll()">
+    <div class="events-row" [class.list-layout]="viewMode() === 'list'">
+
+      <!-- Event Cards -->
+      <article
+        *ngFor="let event of filteredEvents(); let i = index"
+        class="event-card"
+        [class.featured]="event.featured"
+        [class.list-card]="viewMode() === 'list'"
+        (click)="openEventDetails(event)"
+        appTilt
+        [tiltMax]="viewMode() === 'grid' ? 5 : 0"
+        [tiltScale]="viewMode() === 'grid' ? 1.02 : 1">
+
+        <!-- Featured Badge -->
+        <div class="featured-badge" *ngIf="event.featured">
+          <span>⭐</span>
+          <span>Destacado</span>
+        </div>
+
+        <!-- Image -->
+        <div class="card-image">
+          <img [src]="event.image" [alt]="event.title" loading="lazy" />
+          <div class="image-overlay"></div>
+
+          <!-- Category Tag -->
+          <div class="category-tag">
+            <span>{{getCategoryIcon(event.category)}}</span>
+            {{event.category}}
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="quick-actions">
+            <button class="quick-btn" (click)="$event.stopPropagation(); toggleFavorite(event.id)">
+              <span [class.favorited]="isFavorited(event.id)">❤️</span>
+            </button>
+            <button class="quick-btn" (click)="$event.stopPropagation(); shareEvent(event)">
+              <span>↗️</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="card-content">
+          <div class="card-header">
+            <h3>{{event.title}}</h3>
+            <p class="subtitle">{{event.subtitle}}</p>
+          </div>
+
+          <div class="card-meta">
+            <div class="meta-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="6" width="18" height="15" rx="2" stroke="currentColor" stroke-width="2"/>
+                <path d="M3 10H21M8 3V6M16 3V6" stroke="currentColor" stroke-width="2"/>
+              </svg>
+              <span>{{event.date}}</span>
+            </div>
+
+            <div class="meta-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M12 21C16.4183 21 20 17.4183 20 13C20 8.58172 16.4183 5 12 5C7.58172 5 4 8.58172 4 13C4 17.4183 7.58172 21 12 21Z" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 9V13L15 15" stroke="currentColor" stroke-width="2"/>
+              </svg>
+              <span>{{event.location}}</span>
+            </div>
+
+            <div class="meta-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2"/>
+                <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                <path d="M23 21V19C23 17.9391 22.5786 16.9217 21.8284 16.1716C21.0783 15.4214 20.0609 15 19 15H18" stroke="currentColor" stroke-width="2"/>
+                <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2"/>
+              </svg>
+              <span>{{event.guests}} invitados</span>
+            </div>
+          </div>
+
+          <!-- Gallery Preview -->
+          <div class="gallery-preview" *ngIf="event.gallery && event.gallery.length > 0">
+            <div class="mini-gallery">
+              <img
+                *ngFor="let img of event.gallery.slice(0, 3)"
+                [src]="img"
+                [alt]="event.title"
+                loading="lazy" />
+            </div>
+            <span class="gallery-count">+{{event.gallery.length}} fotos</span>
+          </div>
+
+          <!-- CTA -->
+          <button class="view-details-btn">
+            <span>Ver detalles completos</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Hover effect -->
+        <div class="card-shine"></div>
+      </article>
+
+      <!-- CTA Card al final -->
+      <article class="cta-card" appTilt [tiltMax]="3" [class.list-cta]="viewMode() === 'list'">
+        <div class="cta-content">
+          <div class="cta-icon">✨</div>
+          <h3>¿Quieres que tu evento sea el próximo?</h3>
+          <p>Contáctanos y creemos juntos una experiencia inolvidable</p>
+          <div class="cta-buttons">
+            <button class="btn btn-primary" routerLink="/contacto">
+              <span>💬</span>
+              Planear mi evento
+            </button>
+            <button class="btn btn-outline" (click)="toggleChatbot()">
+              <span>🤖</span>
+              Consultar con IA
+            </button>
+          </div>
+
+          <div class="cta-stats">
+            <div class="stat">
+              <strong>500+</strong>
+              <span>Eventos realizados</span>
+            </div>
+            <div class="stat">
+              <strong>98%</strong>
+              <span>Satisfacción</span>
+            </div>
+            <div class="stat">
+              <strong>24/7</strong>
+              <span>Soporte</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="scroll-progress" *ngIf="viewMode() === 'grid'">
+    <div class="progress-bar" [style.transform]="'scaleX(' + progress() + ')'"></div>
+  </div>
+</section>
+
+<!-- Eventos Destacados -->
+<section class="featured-events" *ngIf="featuredEvents().length > 0">
+  <div class="container">
+    <div class="section-header" appReveal>
+      <span class="section-badge">⭐ Destacados</span>
+      <h2>Eventos <span class="gradient-text">excepcionales</span></h2>
+      <p>Nuestros trabajos más memorables y creativos</p>
+    </div>
+
+    <div class="featured-grid">
+      <div
+        *ngFor="let event of featuredEvents(); let i = index"
+        class="featured-card"
+        [style.animation-delay]="i * 200 + 'ms'"
+        (click)="openEventDetails(event)"
+        appReveal
+        revealDirection="up"
+        [revealDelay]="i * 150">
+
+        <div class="featured-image">
+          <img [src]="event.image" [alt]="event.title" />
+          <div class="featured-overlay">
+            <span class="featured-badge">Evento Destacado</span>
+          </div>
+        </div>
+
+        <div class="featured-content">
+          <h3>{{event.title}}</h3>
+          <p>{{event.subtitle}}</p>
+          <div class="featured-meta">
+            <span>{{getCategoryIcon(event.category)}} {{event.category}}</span>
+            <span>📍 {{event.location}}</span>
+            <span>👥 {{event.guests}} invitados</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section Mejorada -->
+<section class="events-stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card" appReveal revealDirection="up" [revealDelay]="100">
+        <div class="stat-icon">🎉</div>
+        <div class="stat-number">{{events.length}}</div>
+        <div class="stat-label">Eventos realizados</div>
+      </div>
+
+      <div class="stat-card" appReveal revealDirection="up" [revealDelay]="200">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Clientes satisfechos</div>
+      </div>
+
+      <div class="stat-card" appReveal revealDirection="up" [revealDelay]="300">
+        <div class="stat-icon">📸</div>
+        <div class="stat-number">{{totalPhotos()}}</div>
+        <div class="stat-label">Fotos capturadas</div>
+      </div>
+
+      <div class="stat-card" appReveal revealDirection="up" [revealDelay]="400">
+        <div class="stat-icon">💝</div>
+        <div class="stat-number">95%</div>
+        <div class="stat-label">Nos recomiendan</div>
+      </div>
+    </div>
+
+    <!-- Interactive Stats -->
+    <div class="interactive-stats" appReveal revealDirection="up" [revealDelay]="500">
+      <h3>Nuestro impacto en números</h3>
+      <div class="stats-bars">
+        <div class="stat-bar">
+          <label>Bodas realizadas</label>
+          <div class="bar-container">
+            <div class="bar-fill" [style.width]="getCategoryPercentage('Boda') + '%'"></div>
+            <span>{{getCategoryPercentage('Boda')}}%</span>
+          </div>
+        </div>
+        <div class="stat-bar">
+          <label>Eventos corporativos</label>
+          <div class="bar-container">
+            <div class="bar-fill" [style.width]="getCategoryPercentage('Corporativo') + '%'"></div>
+            <span>{{getCategoryPercentage('Corporativo')}}%</span>
+          </div>
+        </div>
+        <div class="stat-bar">
+          <label>Celebraciones familiares</label>
+          <div class="bar-container">
+            <div class="bar-fill" [style.width]="getCategoryPercentage('Cumpleaños') + '%'"></div>
+            <span>{{getCategoryPercentage('Cumpleaños')}}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonios de Eventos -->
+<section class="event-testimonials">
+  <div class="container">
+    <div class="section-header" appReveal>
+      <span class="section-badge">💬 Testimonios</span>
+      <h2>Lo que dicen nuestros <span class="gradient-text">clientes</span></h2>
+    </div>
+
+    <div class="testimonials-slider">
+      <button class="slider-btn prev" (click)="prevTestimonial()">‹</button>
+
+      <div class="testimonials-track" [style.transform]="'translateX(-' + currentTestimonial() * 100 + '%)'">
+        <div *ngFor="let testimonial of eventTestimonials" class="testimonial-slide">
+          <div class="testimonial-card">
+            <div class="testimonial-content">
+              <div class="testimonial-meta">
+                <span class="event-type">{{testimonial.eventType}}</span>
+                <div class="stars">
+                  <span *ngFor="let star of [1,2,3,4,5]">⭐</span>
+                </div>
+              </div>
+              <p class="testimonial-text">"{{testimonial.text}}"</p>
+              <div class="testimonial-author">
+                <strong>{{testimonial.author}}</strong>
+                <span>{{testimonial.event}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="slider-btn next" (click)="nextTestimonial()">›</button>
+    </div>
+  </div>
+</section>
+
+<!-- Chatbot Integrado -->
+<div class="chatbot-widget" [class.active]="chatbotOpen()">
+  <div class="chatbot-header" (click)="toggleChatbot()">
+    <span>🤖 Asistente de Eventos</span>
+    <span class="chatbot-toggle">{{ chatbotOpen() ? '−' : '+' }}</span>
+    <span class="chatbot-status" [class.online]="isOnline">●</span>
+  </div>
+
+  <div class="chatbot-messages" #chatbotMessages>
+    <div *ngFor="let msg of chatMessages"
+         [class]="'chat-message ' + msg.type">
+      <div class="message-bubble">
+        {{ msg.text }}
+        <span class="message-time">{{ msg.timestamp | date:'HH:mm' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="chatbot-input" *ngIf="chatbotOpen()">
+    <input
+      type="text"
+      [(ngModel)]="chatInput"
+      placeholder="Pregunta sobre eventos..."
+      (keyup.enter)="sendChatMessage()"
+      #chatInputElement>
+    <button (click)="sendChatMessage()" class="send-btn">➤</button>
+  </div>
+
+  <div class="chatbot-quick-actions" *ngIf="chatbotOpen()">
+    <button class="quick-action" (click)="quickAction('precios')">
+      💰 Consultar precios
+    </button>
+    <button class="quick-action" (click)="quickAction('disponibilidad')">
+      📅 Consultar fechas
+    </button>
+    <button class="quick-action" (click)="quickAction('categorias')">
+      🎯 Ver categorías
+    </button>
+  </div>
+</div>
+
+<!-- Modal de Detalles del Evento Mejorado -->
+<div class="modal-overlay" *ngIf="selectedEvent()" (click)="closeEventDetails()">
+  <div class="modal-content event-modal" (click)="$event.stopPropagation()" [@modalAnimation]>
+
+    <button class="modal-close" (click)="closeEventDetails()" aria-label="Cerrar">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </button>
+
+    <!-- Header con imagen -->
+    <div class="modal-header-image">
+      <img [src]="selectedEvent()!.image" [alt]="selectedEvent()!.title" />
+      <div class="header-overlay">
+        <span class="modal-category">
+          {{getCategoryIcon(selectedEvent()!.category)}} {{selectedEvent()!.category}}
+        </span>
+        <h2>{{selectedEvent()!.title}}</h2>
+        <p>{{selectedEvent()!.subtitle}}</p>
+
+        <!-- Action Buttons -->
+        <div class="modal-actions">
+          <button class="action-btn" (click)="toggleFavorite(selectedEvent()!.id)">
+            <span [class.favorited]="isFavorited(selectedEvent()!.id)">❤️</span>
+            Favorito
+          </button>
+          <button class="action-btn" (click)="shareEvent(selectedEvent()!)">
+            <span>↗️</span>
+            Compartir
+          </button>
+          <button class="action-btn" (click)="downloadEventInfo(selectedEvent()!)">
+            <span>📥</span>
+            Descargar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Información del evento -->
+    <div class="modal-body">
+      <div class="event-info-grid">
+        <div class="info-item">
+          <div class="info-icon">📅</div>
+          <div>
+            <strong>Fecha</strong>
+            <span>{{selectedEvent()!.date}}</span>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">📍</div>
+          <div>
+            <strong>Ubicación</strong>
+            <span>{{selectedEvent()!.location}}</span>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">👥</div>
+          <div>
+            <strong>Invitados</strong>
+            <span>{{selectedEvent()!.guests}} personas</span>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">⏱️</div>
+          <div>
+            <strong>Duración</strong>
+            <span>6 horas aprox.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Servicios Incluidos -->
+      <div class="services-included">
+        <h3>✨ Servicios Incluidos</h3>
+        <div class="services-grid">
+          <div class="service-item" *ngFor="let service of getEventServices(selectedEvent()!.category)">
+            <span class="service-icon">{{service.icon}}</span>
+            <span>{{service.name}}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Galería -->
+      <div class="modal-gallery" *ngIf="selectedEvent()!.gallery">
+        <h3>Galería del evento</h3>
+        <div class="gallery-grid">
+          <img
+            *ngFor="let img of selectedEvent()!.gallery; let i = index"
+            [src]="img"
+            [alt]="selectedEvent()!.title"
+            (click)="openLightbox(i)" />
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="modal-cta">
+        <div class="cta-content">
+          <h3>¿Te gustó este evento?</h3>
+          <p>Podemos crear una experiencia similar o mejor para ti</p>
+          <div class="cta-buttons">
+            <button class="btn btn-primary btn-large" routerLink="/contacto" (click)="closeEventDetails()">
+              Solicitar cotización
+            </button>
+            <button class="btn btn-outline" (click)="toggleChatbot()">
+              🤖 Consultar con IA
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox para galería -->
+<div class="lightbox-overlay" *ngIf="lightboxOpen" (click)="closeLightbox()">
+  <div class="lightbox-content" (click)="$event.stopPropagation()">
+    <button class="lightbox-close" (click)="closeLightbox()">×</button>
+    <button class="lightbox-nav prev" (click)="prevImage()">‹</button>
+
+    <img [src]="selectedEvent()!.gallery![currentImageIndex]" [alt]="selectedEvent()!.title" />
+
+    <button class="lightbox-nav next" (click)="nextImage()">›</button>
+
+    <div class="lightbox-info">
+      <span>{{currentImageIndex + 1}} / {{selectedEvent()!.gallery!.length}}</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,281 @@
+/* ========== Paleta unificada ========== */
+$brand-dark:   #132440;
+$brand-mid:    #16476A;
+$brand-teal:   #3B9797;
+$brand-accent: #BF092F;
+
+$text-strong:  #1f2a37;
+$text-muted:   #6b7280;
+$bg-soft:      #f5f7fa;
+
+/* También como CSS variables para Ionic */
+:host {
+  --brand-dark:   #132440;
+  --brand-mid:    #16476A;
+  --brand-teal:   #3B9797;
+  --brand-accent: #BF092F;
+
+  --text-strong:  #1f2a37;
+  --text-muted:   #6b7280;
+  --bg-soft:      #f5f7fa;
+
+  --ion-background-color: var(--bg-soft);
+  --ion-text-color: var(--text-strong);
+}
+
+/* ========== Header ========== */
+ion-header {
+  ion-toolbar {
+    --background: #132440;
+    --color: #fff;
+    --border-width: 0;
+    box-shadow: 0 6px 18px rgba(19, 36, 64, 0.28);
+  }
+  ion-title {
+    font-weight: 700;
+    letter-spacing: .2px;
+  }
+}
+
+/* ========== Página / Layout ========== */
+.register-content {
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 32px;
+  background:
+    radial-gradient(1200px 300px at 80% -10%, rgba(22,71,106,.08), transparent 60%),
+    radial-gradient(900px 250px at -10% 0%, rgba(59,151,151,.07), transparent 60%),
+    var(--bg-soft);
+}
+
+.register-container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 20px 16px;
+}
+
+/* ========== Bienvenida / Hero ========== */
+.welcome-section {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 20px 16px;
+  margin-bottom: 16px;
+
+  background:
+    linear-gradient(135deg, rgba(22,71,106,.08), rgba(59,151,151,.06));
+  border: 1px solid rgba(22,71,106,.14);
+  border-radius: 16px;
+
+  h1 {
+    margin: 6px 0 2px;
+    font-size: 22px;
+    font-weight: 800;
+    color: $brand-dark;
+  }
+
+  p {
+    margin: 0;
+    color: $text-muted;
+    font-weight: 500;
+  }
+
+  .icon-wrapper {
+    width: 60px; height: 60px;
+    display: grid; place-items: center;
+    border-radius: 16px;
+    color: #fff;
+    background: linear-gradient(135deg, $brand-accent, lighten($brand-accent, 6%));
+    box-shadow: 0 10px 24px rgba($brand-accent, .25), 0 2px 6px rgba(0,0,0,.06);
+
+    ion-icon { font-size: 28px; }
+  }
+}
+
+/* ========== Tarjeta del formulario ========== */
+.form-card {
+  margin: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow:
+    0 10px 28px rgba(19,36,64,.08),
+    0 2px 6px rgba(0,0,0,.04);
+
+  ion-card-content {
+    padding: 18px;
+    @media (min-width: 768px) { padding: 22px; }
+  }
+}
+
+/* ========== Secciones y títulos ========== */
+.form-section {
+  &:not(:first-child) { margin-top: 6px; }
+  margin-bottom: 10px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 14px;
+  padding-left: 10px;
+
+  font-size: 15px;
+  font-weight: 800;
+  color: $brand-dark;
+  border-left: 4px solid $brand-accent;
+
+  ion-icon {
+    color: $brand-teal;
+    font-size: 18px;
+  }
+}
+
+/* ========== Inputs ========== */
+.input-group {
+  margin-bottom: 12px;
+
+  ion-item {
+    --background: #fff;
+    --color: var(--text-strong);
+    --padding-start: 12px;
+    --inner-padding-end: 12px;
+    --highlight-color-focused: #3B9797;
+
+    border: 1.5px solid #e5e7eb;
+    border-radius: 14px;
+    transition: box-shadow .2s ease, border-color .2s ease, transform .04s ease;
+
+    ion-icon[slot="start"] {
+      color: $brand-mid;
+      font-size: 20px;
+      margin-right: 4px;
+    }
+
+    ion-label {
+      color: $text-muted;
+      font-weight: 600;
+    }
+
+    ion-input {
+      --color: var(--text-strong);
+      --placeholder-color: #9aa3af;
+      font-weight: 600;
+      letter-spacing: .2px;
+    }
+  }
+
+  /* Focus ring elegante */
+  ion-item.item-has-focus {
+    border-color: $brand-teal;
+    box-shadow: 0 0 0 4px rgba($brand-teal, .18);
+    transform: translateY(-1px);
+  }
+
+  /* Estado de error */
+  ion-item.error {
+    border-color: $brand-accent;
+    box-shadow: 0 0 0 4px rgba($brand-accent, .15);
+    --highlight-color-focused: #BF092F;
+
+    ion-icon[slot="start"] { color: $brand-accent; }
+    ion-label { color: $brand-accent; }
+  }
+
+  .error-note {
+    margin: 6px 4px 0 8px;
+    padding: 8px 10px;
+    display: grid; grid-auto-flow: column; gap: 8px; align-items: center;
+    width: fit-content;
+
+    font-size: 12px;
+    font-weight: 700;
+    color: darken($brand-accent, 8%);
+
+    background: linear-gradient(0deg, rgba($brand-accent,.08), rgba($brand-accent,.08));
+    border: 1px solid rgba($brand-accent,.18);
+    border-radius: 10px;
+
+    ion-icon { font-size: 16px; }
+  }
+}
+
+/* ========== Grid (nombre / apellido) ========== */
+ion-grid.ion-no-padding {
+  ion-row { --ion-grid-column-padding: 0; }
+  ion-col { padding: 0; }
+}
+
+/* ========== Botones ========== */
+.button-container {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.submit-button {
+  --border-radius: 14px;
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  --box-shadow: 0 10px 22px rgba(22,71,106,.22), 0 3px 8px rgba(0,0,0,.08);
+  --color: #fff;
+  --background: linear-gradient(90deg, #16476A, #3B9797);
+
+  font-weight: 800;
+  letter-spacing: .3px;
+
+  &:hover { filter: brightness(1.04); }
+  &:active { transform: translateY(1px); }
+
+  ion-spinner { --color: #fff; width: 20px; height: 20px; }
+}
+
+.login-button {
+  --border-radius: 12px;
+  --color: #16476A;
+
+  font-weight: 700;
+
+  strong { color: $brand-accent; font-weight: 900; }
+
+  &:hover { text-decoration: underline; text-underline-offset: 3px; }
+}
+
+/* ========== Modo oscuro opcional ========== */
+@media (prefers-color-scheme: dark) {
+  :host {
+    --ion-background-color: #0f172a;
+    --ion-text-color: #e5e7eb;
+  }
+
+  .register-content {
+    background:
+      radial-gradient(1200px 300px at 80% -10%, rgba(22,71,106,.18), transparent 60%),
+      radial-gradient(900px 250px at -10% 0%, rgba(59,151,151,.14), transparent 60%),
+      #0f172a;
+  }
+
+  .welcome-section {
+    background: linear-gradient(135deg, rgba(22,71,106,.20), rgba(59,151,151,.18));
+    border-color: rgba(59,151,151,.28);
+    h1 { color: #f3f4f6; }
+    p  { color: #cbd5e1; }
+  }
+
+  .form-card { background: #0b1220; }
+
+  .input-group {
+    ion-item {
+      --background: #0b1220;
+      border-color: rgba(148,163,184,.24);
+
+      ion-label { color: #cbd5e1; }
+      ion-input { --color: #e5e7eb; --placeholder-color: #94a3b8; }
+    }
+  }
+
+  .login-button { --color: #93c5fd; }
+}

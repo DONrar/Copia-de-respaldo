@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Usuarios</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Loading -->
+  <div *ngIf="loading" class="center">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!loading && error" class="center error">
+    {{ error }}
+  </div>
+
+  <!-- Lista de usuarios -->
+  <ion-list *ngIf="!loading && !error">
+    <ion-item *ngFor="let user of users">
+      <ion-label>
+        <h2>{{ user.name }}</h2>
+        <p>@{{ user.username }}</p>
+        <p>{{ user.email }}</p>
+        <p *ngIf="user.address?.city">Ciudad: {{ user.address?.city }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

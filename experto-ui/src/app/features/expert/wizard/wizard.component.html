@@ -1,0 +1,111 @@
+<body>
+  <!-- ========== LOADING STATE ========== -->
+  <section class="wrap" *ngIf="!loaded()">
+    <div class="card loading-card">
+      Cargando preguntas…
+    </div>
+  </section>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <section class="wrap" *ngIf="loaded()">
+    <!-- Header -->
+    <header class="hdr">
+      <a routerLink="/expert" class="back">← Cambiar dominio</a>
+      <h2>{{ domain() }}</h2>
+    </header>
+
+    <!-- ========== MODO PREGUNTAS ========== -->
+    <ng-container *ngIf="!result()">
+      <!-- Si hay pregunta actual -->
+      <div class="card" *ngIf="currentQ()">
+        <!-- Badge de pregunta -->
+        <div class="qnum">
+          Pregunta {{ index()+1 }} / {{ total() }}
+        </div>
+
+        <!-- Texto de la pregunta -->
+        <h3 class="qtext">{{ currentQ()?.text }}</h3>
+
+        <!-- Opciones -->
+        <div class="options">
+          <button *ngFor="let opt of currentQ()?.options" (click)="selectOption(opt.value)"
+            [class.selected]="isSelected(opt.value)">
+            {{ opt.text }}
+          </button>
+        </div>
+
+        <!-- Navegación -->
+        <div class="nav">
+          <button (click)="prev()" [disabled]="index()===0">
+            ← Anterior
+          </button>
+          <button (click)="next()" [disabled]="!hasAnswerFor(currentQ()?.id)">
+            Siguiente →
+          </button>
+        </div>
+
+        <!-- Barra de progreso -->
+        <div class="progress">
+          <div class="bar" [style.width.%]="progressPct()"></div>
+        </div>
+
+        <!-- Submit (solo en última pregunta) -->
+        <div class="submit" *ngIf="index()===total()-1">
+          <label class="trace-toggle">
+            <input type="checkbox" [(ngModel)]="withTrace">
+            Ver detalle de reglas (traza)
+          </label>
+          <button class="primary" (click)="submit()" [disabled]="!allAnswered()">
+            Obtener diagnóstico
+          </button>
+        </div>
+      </div>
+
+      <!-- Si no hay preguntas -->
+      <div class="card empty-card" *ngIf="!currentQ()">
+        No hay preguntas para {{ domain() }}.
+      </div>
+    </ng-container>
+
+    <!-- ========== RESULTADO ========== -->
+    <div class="card result" *ngIf="result()">
+      <h3>Diagnóstico</h3>
+
+      <!-- Diagnóstico -->
+      <p class="diag">{{ result()?.diagnosis }}</p>
+
+      <!-- Metadata -->
+      <div class="meta">
+        <div><b>Regla aplicada:</b> {{ result()?.ruleMatched }}</div>
+        <div><b>Nivel de certeza:</b> {{ certaintyPct() | number:'1.0-1' }}%</div>
+      </div>
+
+      <!-- Barra de certeza dinámica -->
+      <div class="cf-bar">
+        <div class="cf-fill" [style.width.%]="certaintyPct()" [style.background]="certaintyColor()"></div>
+      </div>
+
+      <!-- Traza de reglas -->
+      <div class="trace" *ngIf="hasTrace()">
+        <h4>Trazabilidad de reglas evaluadas:</h4>
+        <ul>
+          <li *ngFor="let t of result()?.trace" [class.ok]="t.matched" [class.fail]="!t.matched">
+            <span [class.ok]="t.matched" [class.fail]="!t.matched">
+              {{ t.matched ? '✔' : '✖' }} {{ t.ruleName }}
+            </span>
+            <small *ngIf="t.certaintyContribution">
+              (+{{ (t.certaintyContribution * 100) | number:'1.0-1' }}%)
+            </small>
+            <div class="reason" *ngIf="t.reason">{{ t.reason }}</div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Acciones -->
+      <div class="actions">
+        <button class="primary" (click)="restart()">Nuevo diagnóstico</button>
+        <a routerLink="/expert" class="btn">Volver a dominios</a>
+      </div>
+    </div>
+  </section>
+</body>

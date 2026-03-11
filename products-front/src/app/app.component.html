@@ -1,0 +1,86 @@
+ <div class="app-container">
+      <h1>Productos</h1>
+
+      <div class="card">
+        <h2>Listado de productos</h2>
+
+        <button (click)="loadProducts()" class="btn btn-secondary">
+          Recargar
+        </button>
+
+        <p *ngIf="loadingList">Cargando productos...</p>
+        <p *ngIf="error" class="error">{{ error }}</p>
+
+        <table *ngIf="products.length > 0 && !loadingList" class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Precio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of products">
+              <td>{{ p.id }}</td>
+              <td>{{ p.name }}</td>
+              <td>{{ p.description }}</td>
+              <td>{{ p.price | currency:'COP':'symbol':'1.0-0' }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p *ngIf="!loadingList && products.length === 0">
+          No hay productos todavía.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Crear producto</h2>
+
+        <form (ngSubmit)="addProduct()" #productForm="ngForm" class="form">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input
+              type="text"
+              name="name"
+              required
+              [(ngModel)]="newProduct.name"
+              class="input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Descripción</label>
+            <input
+              type="text"
+              name="description"
+              required
+              [(ngModel)]="newProduct.description"
+              class="input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Precio</label>
+            <input
+              type="number"
+              name="price"
+              required
+              min="1"
+              [(ngModel)]="newProduct.price"
+              class="input"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="productForm.invalid || saving"
+          >
+            {{ saving ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </form>
+      </div>
+    </div>
+<router-outlet />

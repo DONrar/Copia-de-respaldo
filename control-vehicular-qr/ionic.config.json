@@ -1,0 +1,7 @@
+{
+  "name": "control-vehicular-qr",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

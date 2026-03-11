@@ -1,0 +1,41 @@
+ <ion-header>
+      <ion-toolbar>
+        <ion-title>Productos</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content [fullscreen]="true">
+
+      <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
+
+      <ng-container *ngIf="loading; else listTpl">
+        <div style="display:flex;justify-content:center;margin-top:2rem;">
+          <ion-spinner></ion-spinner>
+        </div>
+      </ng-container>
+
+      <ng-template #listTpl>
+        <ion-list *ngIf="products?.length; else emptyTpl">
+          <ion-item *ngFor="let product of products">
+            <ion-label>
+              <h2>{{ product.name }}</h2>
+              <p *ngIf="product.description">{{ product.description }}</p>
+              <p *ngIf="product.price">Precio: {{ product.price | currency:'COP' }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+        <ng-template #emptyTpl>
+          <div style="text-align:center;margin-top:2rem;">
+            No hay productos registrados.
+          </div>
+        </ng-template>
+      </ng-template>
+
+      <div *ngIf="error" style="color:red;text-align:center;margin-top:1rem;">
+        {{ error }}
+      </div>
+
+    </ion-content>

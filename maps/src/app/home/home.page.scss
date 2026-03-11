@@ -1,0 +1,10 @@
+  ion-content {
+        /* Para que en Android se vea el mapa debajo del WebView */
+        --background: transparent;
+      }
+
+      capacitor-google-map {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }

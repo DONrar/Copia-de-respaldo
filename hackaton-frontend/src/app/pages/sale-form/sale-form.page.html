@@ -1,0 +1,315 @@
+<ion-header [translucent]="true" class="custom-header">
+  <ion-toolbar class="brand-toolbar success">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-back-button defaultHref="/products" class="custom-back-btn"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title class="page-title">
+      <ion-icon name="cart-outline" class="title-icon"></ion-icon>
+      Registrar Venta
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="onCancel()" [disabled]="isSaving" class="close-btn" fill="clear">
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="custom-content">
+  <form [formGroup]="saleForm" (ngSubmit)="onSubmit()" class="sale-form">
+
+    <!-- PRODUCTO -->
+    <ion-card class="form-section-card">
+      <ion-card-header class="card-header">
+        <ion-card-title class="card-title">
+          <div class="title-container">
+            <ion-icon name="cube-outline" class="section-icon"></ion-icon>
+            Producto
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content class="card-content">
+        <ion-list lines="full" class="custom-list">
+          <ion-item *ngIf="products.length > 5" class="search-item">
+            <ion-searchbar
+              [(ngModel)]="productSearch"
+              (ionInput)="onSearchProducts($event)"
+              placeholder="Buscar producto..."
+              [ngModelOptions]="{standalone: true}"
+              class="custom-searchbar">
+            </ion-searchbar>
+          </ion-item>
+
+          <ion-item [class.invalid-field]="isFieldInvalid('productId')" class="select-item">
+            <ion-label position="stacked" class="input-label">Seleccionar Producto *</ion-label>
+            <ion-select
+              formControlName="productId"
+              interface="action-sheet"
+              placeholder="Elige un producto"
+              class="custom-select"
+              (ionChange)="onProductSelection()">
+              <ion-select-option *ngFor="let p of filteredProducts" [value]="p.id">
+                {{ p.name }} — Stock: {{ p.stock }} {{ p.unit }}
+              </ion-select-option>
+            </ion-select>
+            <ion-note slot="error" *ngIf="isFieldInvalid('productId')" class="error-message">
+              {{ getErrorMessage('productId') }}
+            </ion-note>
+          </ion-item>
+
+          <ion-item *ngIf="isLoadingProducts" class="loading-item">
+            <ion-label class="loading-label">
+              <ion-spinner name="crescent" class="loading-spinner"></ion-spinner>
+              Cargando productos...
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="!isLoadingProducts && products.length === 0" class="empty-products">
+            <ion-label class="ion-text-wrap empty-label">
+              <div class="empty-icon-container">
+                <ion-icon name="cube-outline" class="empty-icon"></ion-icon>
+              </div>
+              <h3>No hay productos disponibles</h3>
+              <p>Agrega productos con stock primero.</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+        <div *ngIf="selectedProduct" class="product-info animated-fade-in">
+          <div class="product-header">
+            <h3 class="product-name">{{ selectedProduct.name }}</h3>
+            <ion-badge [color]="selectedProduct.stock <= selectedProduct.minStock ? 'warning' : 'success'" class="stock-badge">
+              {{ selectedProduct.stock }} {{ selectedProduct.unit }}
+            </ion-badge>
+          </div>
+          <p *ngIf="selectedProduct.description" class="product-description">{{ selectedProduct.description }}</p>
+
+          <div class="product-details">
+            <ion-chip color="primary" outline class="detail-chip">
+              <ion-icon name="cash-outline" class="chip-icon"></ion-icon>
+              <ion-label>Precio: ${{ selectedProduct.salePrice | number:'1.2-2' }}</ion-label>
+            </ion-chip>
+            <ion-chip [color]="selectedProduct.stock <= selectedProduct.minStock ? 'warning' : 'success'" outline class="detail-chip">
+              <ion-icon name="cube-outline" class="chip-icon"></ion-icon>
+              <ion-label>Stock: {{ selectedProduct.stock }} {{ selectedProduct.unit }}</ion-label>
+            </ion-chip>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- CLIENTE -->
+    <ion-card *ngIf="selectedProduct" class="form-section-card">
+      <ion-card-header class="card-header">
+        <ion-card-title class="card-title">
+          <div class="title-container">
+            <ion-icon name="people-outline" class="section-icon"></ion-icon>
+            Cliente
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content class="card-content">
+        <ion-segment [(ngModel)]="customerMode" (ionChange)="onCustomerModeChange()" [ngModelOptions]="{standalone: true}">
+          <ion-segment-button value="existing">
+            <ion-label>Existente</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="new">
+            <ion-label>Nuevo</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+
+        <!-- EXISTENTE -->
+        <div *ngIf="customerMode === 'existing'">
+          <ion-item *ngIf="customers.length > 6" class="search-item">
+            <ion-searchbar
+              [(ngModel)]="customerSearch"
+              (ionInput)="onSearchCustomers($event)"
+              placeholder="Buscar cliente..."
+              [ngModelOptions]="{standalone: true}">
+            </ion-searchbar>
+          </ion-item>
+
+          <ion-item [class.invalid-field]="isFieldInvalid('customerId')">
+            <ion-label position="stacked" class="input-label">Seleccionar Cliente *</ion-label>
+            <ion-select
+              formControlName="customerId"
+              interface="popover"
+              placeholder="Elige un cliente">
+              <ion-select-option *ngFor="let c of filteredCustomers" [value]="c.id">
+                {{ c.name }} — {{ c.contactNumber || 'sin teléfono' }}
+              </ion-select-option>
+            </ion-select>
+            <ion-note slot="error" *ngIf="isFieldInvalid('customerId')" class="error-message">
+              Debes seleccionar un cliente o cambiar a “Nuevo”.
+            </ion-note>
+          </ion-item>
+        </div>
+
+        <!-- NUEVO -->
+        <div *ngIf="customerMode === 'new'">
+          <ion-item [class.invalid-field]="isFieldInvalid('customerName')">
+            <ion-label position="stacked" class="input-label">Nombre del Cliente *</ion-label>
+            <ion-input formControlName="customerName" type="text" placeholder="Ej: Juan Pérez"></ion-input>
+            <ion-note slot="error" *ngIf="isFieldInvalid('customerName')" class="error-message">
+              {{ getErrorMessage('customerName') }}
+            </ion-note>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked" class="input-label">Teléfono</ion-label>
+            <ion-input formControlName="customerPhone" type="tel" placeholder="Opcional"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked" class="input-label">Email</ion-label>
+            <ion-input formControlName="customerEmail" type="email" placeholder="Opcional"></ion-input>
+          </ion-item>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- DETALLES DE LA VENTA -->
+    <ion-card *ngIf="selectedProduct" class="form-section-card sale-details">
+      <ion-card-header class="card-header">
+        <ion-card-title class="card-title">
+          <div class="title-container">
+            <ion-icon name="calculator-outline" class="section-icon"></ion-icon>
+            Detalles de la Venta
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content class="card-content">
+        <ion-list lines="full" class="custom-list">
+          <ion-item [class.invalid-field]="isFieldInvalid('quantity')">
+            <ion-label position="stacked" class="input-label">Cantidad *</ion-label>
+            <ion-input
+              formControlName="quantity"
+              type="number"
+              placeholder="1"
+              min="1"
+              [max]="selectedProduct?.stock || 0"
+              (ionInput)="onQuantityChange()">
+              <div slot="end" class="input-unit">{{ selectedProduct?.unit }}</div>
+            </ion-input>
+            <ion-note slot="error" *ngIf="isFieldInvalid('quantity')" class="error-message">
+              {{ getErrorMessage('quantity') }}
+            </ion-note>
+            <ion-note slot="helper" *ngIf="!isFieldInvalid('quantity')" class="helper-text">
+              Disponible: {{ selectedProduct?.stock }} {{ selectedProduct?.unit }}
+            </ion-note>
+          </ion-item>
+
+          <ion-item [class.invalid-field]="isFieldInvalid('unitPrice')">
+            <ion-label position="stacked" class="input-label">Precio Unitario *</ion-label>
+            <ion-input
+              formControlName="unitPrice"
+              type="number"
+              min="0"
+              step="0.01"
+              (ionInput)="onPriceChange()">
+              <div slot="start" class="currency-symbol">$</div>
+            </ion-input>
+            <ion-note slot="error" *ngIf="isFieldInvalid('unitPrice')" class="error-message">
+              {{ getErrorMessage('unitPrice') }}
+            </ion-note>
+            <ion-note slot="helper" *ngIf="!isFieldInvalid('unitPrice')" class="helper-text">
+              Sugerido: ${{ selectedProduct?.salePrice | number:'1.2-2' }}
+            </ion-note>
+          </ion-item>
+
+          <ion-item button (click)="showDatePicker = true" class="date-item">
+            <ion-icon name="calendar-outline" slot="start" class="date-icon"></ion-icon>
+            <ion-label class="date-label">
+              <h3>Fecha de Venta</h3>
+              <p class="date-value">{{ formatDate(saleForm.get('saleDate')?.value) }}</p>
+            </ion-label>
+            <ion-icon name="chevron-forward-outline" slot="end" class="chevron-icon"></ion-icon>
+          </ion-item>
+
+          <ion-item class="textarea-item">
+            <ion-label position="stacked" class="input-label">Notas (Opcional)</ion-label>
+            <ion-textarea formControlName="notes" rows="2" placeholder="Información adicional"></ion-textarea>
+          </ion-item>
+        </ion-list>
+
+        <!-- RESUMEN -->
+        <div class="sale-summary animated-fade-in">
+          <h4 class="summary-title">Resumen de Venta</h4>
+
+          <div class="summary-row">
+            <span class="summary-label">Total a Cobrar:</span>
+            <strong class="total-amount">${{ totalAmount | number:'1.2-2' }}</strong>
+          </div>
+
+          <div class="summary-row" *ngIf="estimatedProfit !== 0">
+            <span class="summary-label">Ganancia Estimada:</span>
+            <strong [class]="estimatedProfit > 0 ? 'profit-positive' : 'profit-negative'" class="profit-amount">
+              ${{ estimatedProfit | number:'1.2-2' }}
+              <span class="profit-percent">({{ profitMargin | number:'1.1-1' }}%)</span>
+            </strong>
+          </div>
+
+          <div class="summary-row" *ngIf="saleForm.get('quantity')?.value > 0">
+            <span class="summary-label">Stock Restante:</span>
+            <ion-badge [color]="stockStatus" class="remaining-stock">
+              {{ remainingStock }} {{ selectedProduct?.unit }}
+            </ion-badge>
+          </div>
+
+          <ion-chip *ngIf="willBeLowStock" color="warning" class="stock-warning animated-pulse">
+            <ion-icon name="warning-outline" class="warning-icon"></ion-icon>
+            <ion-label>El stock quedará por debajo del mínimo</ion-label>
+          </ion-chip>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- ACCIONES -->
+    <div class="action-buttons" *ngIf="selectedProduct">
+      <ion-button expand="block" color="medium" fill="outline" (click)="onCancel()" [disabled]="isSaving">
+        <ion-icon name="close-outline" slot="start"></ion-icon>
+        Cancelar
+      </ion-button>
+
+      <ion-button expand="block" color="success" type="submit" [disabled]="saleForm.invalid || isSaving">
+        <ion-spinner *ngIf="isSaving" name="crescent" slot="start"></ion-spinner>
+        <ion-icon *ngIf="!isSaving" name="checkmark-circle-outline" slot="start"></ion-icon>
+        {{ isSaving ? 'Registrando...' : 'Registrar Venta' }}
+      </ion-button>
+    </div>
+
+    <div class="required-note">
+      <ion-note>* Campos requeridos</ion-note>
+    </div>
+  </form>
+
+  <!-- Date Modal -->
+  <ion-modal [isOpen]="showDatePicker" (didDismiss)="showDatePicker = false" class="date-modal">
+    <ng-template>
+      <ion-header class="modal-header">
+        <ion-toolbar class="modal-toolbar">
+          <ion-title class="modal-title">Seleccionar Fecha</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="showDatePicker = false" class="modal-close-btn">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="modal-content">
+        <ion-datetime
+          [value]="saleForm.get('saleDate')?.value"
+          (ionChange)="onDateChange($event)"
+          presentation="date-time"
+          [max]="maxDateIso"
+          locale="es-ES"
+          class="custom-datetime">
+        </ion-datetime>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>
